@@ -39,7 +39,7 @@ const HomePage = () => {
             </>
           )}
           {visibleComp === "login" && (
-            <div>
+            <div className="flex">
               <BackIcon
                 className="size-10 dark:fill-white cursor-pointer"
                 onClick={() => setVisibleComp("btns")}
@@ -48,7 +48,7 @@ const HomePage = () => {
             </div>
           )}
           {visibleComp === "signup" && (
-            <div>
+            <div className="flex">
               <BackIcon
                 className="size-10 dark:fill-white cursor-pointer"
                 onClick={() => setVisibleComp("btns")}

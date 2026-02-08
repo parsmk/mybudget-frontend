@@ -11,6 +11,7 @@ type ButtonProps = {
   variant?: ButtonVariants;
   size?: ButtonSizes;
   children?: React.ReactNode;
+  classNames?: string;
   onClick?: () => void;
 };
 
@@ -19,6 +20,7 @@ export const Button = ({
   variant = "primary",
   size = "md",
   children,
+  classNames,
   onClick,
 }: ButtonProps) => {
   const variantClasses: Record<ButtonVariants, string> = {
@@ -40,7 +42,7 @@ export const Button = ({
 
   return (
     <button
-      className={`
+      className={`${classNames}
         block rounded-md 
         text-center font-semibold
         outline outline-1.5
