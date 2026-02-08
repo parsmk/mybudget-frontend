@@ -41,7 +41,7 @@ export const Button = ({
   return (
     <button
       className={`
-        block m-2 rounded-md 
+        block rounded-md 
         text-center font-semibold
         outline outline-1.5
         transition cursor-pointer
