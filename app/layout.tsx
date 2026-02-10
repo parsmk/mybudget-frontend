@@ -15,11 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ReactQueryProvider>
-        <ApiClientProvider>
-          <body>{children}</body>
-        </ApiClientProvider>
-      </ReactQueryProvider>
+      <body>
+        <ReactQueryProvider>
+          <ApiClientProvider>{children}</ApiClientProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }

@@ -11,16 +11,16 @@ export class APIClientError extends Error {
 }
 
 export class APIClient {
-  private readonly baseURL = process.env.API_URL;
+  private readonly baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-  private async signup(data: SignupRequest) {
+  public async signup(data: SignupRequest) {
     return this.request<void>("signup", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  private async login(data: LoginRequest) {
+  public async login(data: LoginRequest) {
     return this.request<LoginResponse>("login", {
       method: "POST",
       body: JSON.stringify(data),

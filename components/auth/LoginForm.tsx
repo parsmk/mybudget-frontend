@@ -3,14 +3,25 @@
 import React, { useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { InputField } from "../ui-kit/InputField";
+import { useLogin } from "@/hooks/auth/useLogin";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    console.log(`Email: ${email}`);
-    console.log(`Password: ${password}`);
+  const { mutateAsync: login } = useLogin();
+  const [errs, setErrs] = useState<string[]>([]);
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    try {
+      await login({
+        email,
+        password,
+      });
+    } catch (errs) {
+      setErrs((prev) => [...prev, errs as string]);
+    }
   };
 
   return (

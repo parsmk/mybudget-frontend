@@ -3,16 +3,33 @@
 import React, { useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { InputField } from "../ui-kit/InputField";
+import { useSignup } from "@/hooks/auth/useSignup";
 
 export const SignupForm = () => {
+  // Form states
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    console.log(`Email: ${email}`);
-    console.log(`Password: ${password}`);
-    console.log(`Confirm Password: ${confirmPass}`);
+  const { mutateAsync: signup } = useSignup();
+  const [errs, setErrs] = useState<string[]>([]);
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    setErrs([]);
+    try {
+      if (password !== confirmPass) {
+        setErrs((prev) => [...prev, "Passwords don't match!"]);
+        return;
+      }
+
+      await signup({
+        email: email,
+        password: password,
+      });
+    } catch (errs) {
+      setErrs((prev) => [...prev, errs as string]);
+    }
   };
 
   return (
