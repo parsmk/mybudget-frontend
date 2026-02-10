@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import ApiClientProvider from "@/providers/ApiClientProvider";
 
 export const metadata: Metadata = {
   title: "MyBudget",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ReactQueryProvider>
-        <body>{children}</body>
+        <ApiClientProvider>
+          <body>{children}</body>
+        </ApiClientProvider>
       </ReactQueryProvider>
     </html>
   );
