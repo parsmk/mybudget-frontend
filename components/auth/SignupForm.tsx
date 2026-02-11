@@ -6,7 +6,6 @@ import { InputField } from "../ui-kit/InputField";
 import { useSignup } from "@/hooks/auth/useSignup";
 
 export const SignupForm = () => {
-  // Form states
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
