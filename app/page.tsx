@@ -15,8 +15,8 @@ const HomePage = () => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <div className="grid grid-cols-[auto_1fr] gap-10 items-center">
-        <h1 className="text-5xl whitespace-pre-line text-right">{`MyBudget\nApp`}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-10 items-center">
+        <h1 className="text-5xl whitespace-pre-line sm:text-right">{`MyBudget\nApp`}</h1>
         <div>
           <div
             className={`flex flex-col gap-3 ${visibleComp === "btns" ? visibleClasses : invisibleClasses}`}
@@ -41,10 +41,10 @@ const HomePage = () => {
           <div
             className={`
               relative flex overflow-hidden bg-tertiary/35 rounded-lg
-              ${visibleComp === "login" || visibleComp === "signup" ? `${visibleClasses} w-100 p-10` : invisibleClasses}`}
+              ${visibleComp === "login" || visibleComp === "signup" ? `${visibleClasses} p-5 sm:w-100 sm:p-10` : invisibleClasses}`}
           >
             <BackIcon
-              className={`absolute top-8.5 left-7 size-10 cursor-pointer dark:fill-white transition hover:fill-primary`}
+              className={`absolute top-4.5 left-2 sm:top-8.5 sm:left-7 size-10 cursor-pointer dark:fill-white transition hover:fill-primary`}
               onClick={() => setVisibleComp("btns")}
             />
             {visibleComp === "login" ? (
