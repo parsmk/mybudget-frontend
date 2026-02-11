@@ -6,6 +6,7 @@ import { InputField } from "../ui-kit/InputField";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/_route-map";
+import { AuthFormCard } from "./AuthFormCard";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -30,21 +31,26 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <InputField
-        type="text"
-        name="email"
-        label="Email"
-        placeholder="example@gmail.com..."
-        onChange={setEmail}
-      />
-      <InputField
-        type="password"
-        name="password"
-        label="Password"
-        onChange={setPassword}
-      />
-      <Button type="submit" size="md" variant="primary" />
+    <form onSubmit={handleSubmit} className="h-full w-full">
+      <AuthFormCard>
+        <h2 className="text-2xl text-center">Login</h2>
+        <InputField
+          type="text"
+          name="email"
+          label="Email"
+          placeholder="example@gmail.com..."
+          onChange={setEmail}
+        />
+        <InputField
+          type="password"
+          name="password"
+          label="Password"
+          onChange={setPassword}
+        />
+        <Button type="submit" size="md" variant="primary" classNames="mx-auto">
+          Login
+        </Button>
+      </AuthFormCard>
     </form>
   );
 };

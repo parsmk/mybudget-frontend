@@ -16,18 +16,19 @@ export const InputField = ({
   onChange,
 }: InputFieldProps) => {
   return (
-    <div className="my-4">
+    <div className="w-full">
       <label className="block my-1" htmlFor={name}>
         {label}
       </label>
       <input
         type={type}
+        name={name}
         placeholder={placeholder ?? `${label}...`}
         onChange={(e) => onChange(e.currentTarget.value)}
         className={`
-            p-2 rounded-md
-            outline-1 outline-foreground/10 text-foreground/50
-            transition hover:outline-foreground/50 focus:outline-foreground/50 hover:text-foreground focus:text-foreground focuse:shadow-sm
+            p-2 rounded-md w-full
+            border-1 border-foreground/20 text-foreground/50
+            transition hover:border-foreground/50 focus:border-foreground/50 hover:text-foreground focus:text-foreground focuse:shadow-sm
         `}
       />
     </div>

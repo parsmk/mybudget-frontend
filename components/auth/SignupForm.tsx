@@ -6,6 +6,7 @@ import { InputField } from "../ui-kit/InputField";
 import { useSignup } from "@/hooks/auth/useSignup";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/_route-map";
+import { AuthFormCard } from "./AuthFormCard";
 
 export const SignupForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -37,27 +38,37 @@ export const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <InputField
-        type="text"
-        name="email"
-        label="Email"
-        placeholder="example@gmail.com..."
-        onChange={setEmail}
-      />
-      <InputField
-        type="password"
-        name="password"
-        label="Password"
-        onChange={setPassword}
-      />
-      <InputField
-        type="password"
-        name="confirmPass"
-        label="Confirm Password"
-        onChange={setConfirmPass}
-      />
-      <Button type="submit" size="md" variant="primary" />
+    <form onSubmit={handleSubmit} className="h-full w-full">
+      <AuthFormCard>
+        <h2 className="text-2xl text-center">Sign Up</h2>
+        <InputField
+          type="text"
+          name="email"
+          label="Email"
+          placeholder="example@gmail.com..."
+          onChange={setEmail}
+        />
+        <InputField
+          type="password"
+          name="password"
+          label="Password"
+          onChange={setPassword}
+        />
+        <InputField
+          type="password"
+          name="confirmPass"
+          label="Confirm Password"
+          onChange={setConfirmPass}
+        />
+        <Button
+          type="submit"
+          size="md"
+          variant="primary"
+          classNames="mt-2 self-center"
+        >
+          Sign Up
+        </Button>
+      </AuthFormCard>
     </form>
   );
 };
