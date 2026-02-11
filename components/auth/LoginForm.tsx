@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { InputField } from "../ui-kit/InputField";
 import { useLogin } from "@/hooks/auth/useLogin";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/app/_route-map";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,6 +13,7 @@ export const LoginForm = () => {
 
   const { mutateAsync: login } = useLogin();
   const [errs, setErrs] = useState<string[]>([]);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -19,6 +22,8 @@ export const LoginForm = () => {
         email,
         password,
       });
+
+      router.push(ROUTES.DASHBOARD);
     } catch (errs) {
       setErrs((prev) => [...prev, errs as string]);
     }

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { InputField } from "../ui-kit/InputField";
 import { useSignup } from "@/hooks/auth/useSignup";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/app/_route-map";
 
 export const SignupForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -12,6 +14,7 @@ export const SignupForm = () => {
 
   const { mutateAsync: signup } = useSignup();
   const [errs, setErrs] = useState<string[]>([]);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -26,6 +29,8 @@ export const SignupForm = () => {
         email: email,
         password: password,
       });
+
+      router.push(ROUTES.DASHBOARD);
     } catch (errs) {
       setErrs((prev) => [...prev, errs as string]);
     }
