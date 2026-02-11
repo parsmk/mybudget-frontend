@@ -47,7 +47,7 @@ export const LoginForm = () => {
           label="Password"
           onChange={setPassword}
         />
-        <Button type="submit" size="md" variant="primary" classNames="mx-auto">
+        <Button type="submit" size="md" variant="primary">
           Login
         </Button>
       </AuthFormCard>

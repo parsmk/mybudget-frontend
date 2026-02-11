@@ -19,13 +19,12 @@ const HomePage = () => {
         <h1 className="text-5xl whitespace-pre-line text-right">{`MyBudget\nApp`}</h1>
         <div>
           <div
-            className={`${visibleComp === "btns" ? visibleClasses : invisibleClasses}`}
+            className={`flex flex-col gap-3 ${visibleComp === "btns" ? visibleClasses : invisibleClasses}`}
           >
             <Button
               type="button"
               variant="primary"
               size="lg"
-              classNames="mb-3"
               onClick={() => setVisibleComp("login")}
             >
               Login

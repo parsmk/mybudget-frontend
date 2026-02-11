@@ -60,12 +60,7 @@ export const SignupForm = () => {
           label="Confirm Password"
           onChange={setConfirmPass}
         />
-        <Button
-          type="submit"
-          size="md"
-          variant="primary"
-          classNames="mt-2 self-center"
-        >
+        <Button type="submit" size="md" variant="primary">
           Sign Up
         </Button>
       </AuthFormCard>
