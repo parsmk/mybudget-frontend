@@ -1,4 +1,4 @@
-import { LoginRequest, LoginResponse, SignupRequest } from "./user";
+import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
   public readonly status: number;
@@ -21,26 +21,14 @@ export class APIClient {
   }
 
   public async login(data: LoginRequest) {
-    return this.request<LoginResponse>("login", {
+    return this.request<void>("login", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   private async refreshAccessToken() {
-    try {
-      const response = await this.request<{ accessToken: string }>(
-        "refresh",
-        {
-          method: "POST",
-          credentials: "include",
-        },
-        false,
-      );
-      localStorage.setItem("accessToken", response.accessToken);
-    } catch {
-      localStorage.removeItem("accessToken");
-    }
+    return this.request<void>("refresh", { method: "POST" }, false);
   }
 
   private async request<T>(
@@ -50,17 +38,16 @@ export class APIClient {
   ): Promise<T> {
     const url = `${this.baseURL}/${path}`;
     const headers = new Headers(init.headers ?? {});
+    init.credentials = "include";
 
     const isJsonPayload =
       init.body &&
       !(init.body instanceof FormData) &&
       !(init.body instanceof Blob) &&
       !headers.has("Content-Type");
-    const accessToken = localStorage.getItem("accessToken");
 
     headers.set("Accept", "application/json");
     if (isJsonPayload) headers.set("Content-Type", "application/json");
-    headers.set("Authorization", `Bearer ${accessToken}`);
 
     let response: Response;
     try {
