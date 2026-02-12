@@ -20,7 +20,7 @@ const proxy = async (request: NextRequest) => {
     response.headers.append("set-cookie", setCookie);
   }
 
-  return NextResponse.next();
+  return response;
 };
 
 export default proxy;

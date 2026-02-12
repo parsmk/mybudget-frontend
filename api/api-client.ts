@@ -35,6 +35,10 @@ export class APIClient {
     );
   }
 
+  public async logout() {
+    return this.request<void>("logout", { method: "POST" }, false);
+  }
+
   private async refreshAccessToken() {
     return this.request<void>("refresh", { method: "POST" }, false);
   }
