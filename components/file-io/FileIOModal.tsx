@@ -2,32 +2,62 @@ import { useRef, useState } from "react";
 import { Modal } from "../ui-kit/Modal";
 import { Button } from "../ui-kit/Button";
 import * as XLSX from "xlsx";
+import { CreateTransaction } from "@/api/account";
 
 type FileIOModalProps = {
-  visible: boolean;
-  setInvisible: () => void;
+  open: boolean;
+  close: () => void;
 };
 
-export const FileIOModal = ({ visible, setInvisible }: FileIOModalProps) => {
-  const [sheetData, setSheetData] = useState<string[][]>([]);
+export const FileIOModal = ({ open, close }: FileIOModalProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [sheetData, setSheetData] = useState<string[][]>([]);
+  const [firstDataRow, setFirstDataRow] = useState<number>(-1);
+  const [colMeanings, setColMeanings] = useState<Record<string, number>>({});
+
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
     const sheet = parsed.Sheets[parsed.SheetNames[0]];
-    setSheetData(XLSX.utils.sheet_to_json(sheet, { header: 1 }));
+    setSheetData(
+      XLSX.utils.sheet_to_json(sheet, { raw: false, header: 1, defval: " " }),
+    );
   };
+
+  const prepareAndPostData = () => {
+    const transactions: CreateTransaction[] = [];
+    for (let i = firstDataRow; i < sheetData.length; i++) {
+      const row = sheetData[i];
+      transactions.push({
+        date: row[colMeanings["date"]],
+        payee: row[colMeanings["payee"]],
+        inflow: Number(row[colMeanings["inflow"]]),
+        outflow: Number(row[colMeanings["outflow"]]),
+      });
+    }
+  };
+
   return (
-    <>
-      <Modal close={() => setInvisible()} open={visible}>
-        {sheetData.length > 0 ? (
-          <>
-            <p>Select the first row of data with the checkbox!</p>
-            <table className="border rounded-sm p-2">
+    <Modal
+      close={() => {
+        close();
+        setSheetData([]);
+      }}
+      open={open}
+    >
+      {sheetData.length > 0 ? (
+        <>
+          <p>Select the first row of data with the checkbox!</p>
+          <div className="overflow-x-auto rounded-md border my-2">
+            <table className="divide-y ">
               <tbody className="divide-y divide-foreground">
-                {sheetData.slice(0, 5).map((row, rowKey) => (
-                  <tr key={rowKey} className="divide-x">
+                {sheetData.slice(0, 5).map((row, rowNum) => (
+                  <tr key={rowNum} className="divide-x">
                     <td className="p-2">
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={firstDataRow === rowNum}
+                        onChange={() => setFirstDataRow(rowNum)}
+                      />
                     </td>
                     {row.map((cell, cellKey) => (
                       <td className="p-2" key={cellKey}>
@@ -36,44 +66,66 @@ export const FileIOModal = ({ visible, setInvisible }: FileIOModalProps) => {
                     ))}
                   </tr>
                 ))}
+              </tbody>
+              <tfoot className="divide-y divide-foreground">
                 <tr className="divide-x">
                   <td></td>
                   {sheetData.length > 0 &&
                     sheetData.at(sheetData.length - 1)?.map((_, i) => (
                       <td key={i}>
-                        <select className="w-full">
-                          <option>This</option>
-                          <option>That</option>
-                          <option>The Other</option>
+                        <select
+                          className="w-full"
+                          onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            if (!value) return;
+                            setColMeanings((prev) => ({
+                              ...prev,
+                              [value]: i,
+                            }));
+                          }}
+                        >
+                          <option>--select--</option>
+                          <option>date</option>
+                          <option>payee</option>
+                          <option>inflow</option>
+                          <option>outflow</option>
+                          <option>balance</option>
                         </select>
                       </td>
                     ))}
                 </tr>
-              </tbody>
+              </tfoot>
             </table>
-            <p>
-              Use these dropdowns to select what each column represents
-            </p>{" "}
-          </>
-        ) : (
-          <>
-            <Button type="button" onClick={() => inputRef.current?.click()}>
-              Upload files
+          </div>
+          <p>Use these dropdowns to select what each column represents</p>{" "}
+          <div className="flex justify-end mt-3">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => prepareAndPostData()}
+            >
+              Next
             </Button>
-            <input
-              type="file"
-              hidden
-              ref={inputRef}
-              onChange={(e) => {
-                const input = e.currentTarget.files?.item(0);
-                if (!input) return;
-                readDataSheet(input);
-                e.currentTarget.value = "";
-              }}
-            />
-          </>
-        )}
-      </Modal>
-    </>
+          </div>
+        </>
+      ) : (
+        <>
+          <Button type="button" onClick={() => inputRef.current?.click()}>
+            Upload files
+          </Button>
+          <input
+            type="file"
+            hidden
+            ref={inputRef}
+            onChange={(e) => {
+              const input = e.currentTarget.files?.item(0);
+              if (!input) return;
+              readDataSheet(input);
+              e.currentTarget.value = "";
+            }}
+          />
+        </>
+      )}
+    </Modal>
   );
 };

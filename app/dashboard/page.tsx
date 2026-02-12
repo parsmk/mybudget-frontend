@@ -5,15 +5,12 @@ import { Button } from "@/components/ui-kit/Button";
 import { useRef, useState } from "react";
 
 const DashboardPage = () => {
-  const [isFileIOModalActive, activateFileIOModal] = useState<boolean>(false);
+  const [filIOModal, setFileIOModal] = useState<boolean>(false);
 
   return (
     <div className="flex h-full items-center justify-center">
-      <FileIOModal
-        visible={isFileIOModalActive}
-        setInvisible={() => activateFileIOModal(false)}
-      />
-      <Button type="button" onClick={() => activateFileIOModal(true)}>
+      <FileIOModal open={filIOModal} close={() => setFileIOModal(false)} />
+      <Button type="button" onClick={() => setFileIOModal(true)}>
         Import Statement
       </Button>
     </div>

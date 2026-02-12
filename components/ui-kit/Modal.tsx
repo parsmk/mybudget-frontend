@@ -17,7 +17,7 @@ export const Modal = ({ open, close, children }: ModalProps) => {
       <div
         className={`
             top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-            absolute rounded-md p-5
+            absolute rounded-md p-7.5
             bg-secondary
         `}
         onClick={(e) => e.stopPropagation()}
