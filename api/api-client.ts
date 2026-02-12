@@ -14,17 +14,25 @@ export class APIClient {
   private readonly baseURL = process.env.NEXT_PUBLIC_API_URL;
 
   public async signup(data: SignupRequest) {
-    return this.request<void>("signup", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    return this.request<void>(
+      "signup",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      false,
+    );
   }
 
   public async login(data: LoginRequest) {
-    return this.request<void>("login", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    return this.request<void>(
+      "login",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      false,
+    );
   }
 
   private async refreshAccessToken() {
