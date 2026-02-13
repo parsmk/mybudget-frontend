@@ -3,7 +3,8 @@
 import { FileIOModal } from "@/components/file-io/FileIOModal";
 import { Button } from "@/components/ui-kit/Button";
 import { useTransactions } from "@/hooks/transactions/useTransactions";
-import { useRef, useState } from "react";
+import { formatDollarString } from "@/utils/formatDollarString";
+import { useState } from "react";
 
 const DashboardPage = () => {
   const [filIOModal, setFileIOModal] = useState<boolean>(false);
@@ -17,7 +18,7 @@ const DashboardPage = () => {
           Import Statement
         </Button>
       </div>
-      <table className="divide-y w-full text-center">
+      <table className="divide-y w-full text-justify">
         <thead>
           <tr>
             <th className="p-2">Date</th>
@@ -35,14 +36,16 @@ const DashboardPage = () => {
                 key={t.id}
               >
                 <td className="p-2">{t.date}</td>
-                <td className="p-2 border-x-1">{t.payee}</td>
-                <td className="p-2 border-x-1">{t.category}</td>
-                <td className="p-2 border-x-1">
-                  {Number(t.inflow) === 0 ? "" : t.inflow?.toFixed(2)}
+                <td className="p-2 border-x-1 border-foreground/50">
+                  {t.payee}
                 </td>
-                <td className="p-2">
-                  {Number(t.outflow) === 0 ? "" : t.outflow?.toFixed(2)}
+                <td className="p-2 border-x-1 border-foreground/50">
+                  {t.category}
                 </td>
+                <td className="p-2 border-x-1 border-foreground/50">
+                  {formatDollarString(t.inflow)}
+                </td>
+                <td className="p-2">{formatDollarString(t.outflow)}</td>
               </tr>
             ))}
         </tbody>
