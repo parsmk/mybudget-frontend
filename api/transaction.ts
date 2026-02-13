@@ -6,6 +6,7 @@ export type CreateTransactionRequest = {
 };
 
 export type Transaction = {
+  id: string;
   date: string;
   payee: string;
   category?: string;

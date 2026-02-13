@@ -1,4 +1,4 @@
-import { CreateTransactionRequest, Transaction } from "./account";
+import { CreateTransactionRequest, Transaction } from "./transaction";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
@@ -51,6 +51,12 @@ export class APIClient {
     return this.request<Transaction>("transaction/create", {
       method: "POST",
       body: JSON.stringify(data),
+    });
+  }
+
+  public async getTransactions() {
+    return this.request<Transaction[]>("transaction/", {
+      method: "GET",
     });
   }
   // ENDOF TRANSACTIONS

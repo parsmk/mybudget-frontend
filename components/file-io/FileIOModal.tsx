@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Modal } from "../ui-kit/Modal";
 import { Button } from "../ui-kit/Button";
 import * as XLSX from "xlsx";
-import { CreateTransactionRequest } from "@/api/account";
+import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
 
 type FileIOModalProps = {
