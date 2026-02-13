@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { Modal } from "../ui-kit/Modal";
 import { Button } from "../ui-kit/Button";
 import * as XLSX from "xlsx";
-import { CreateTransaction } from "@/api/account";
+import { CreateTransactionRequest } from "@/api/account";
+import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
 
 type FileIOModalProps = {
   open: boolean;
@@ -14,6 +15,8 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
   const [sheetData, setSheetData] = useState<string[][]>([]);
   const [firstDataRow, setFirstDataRow] = useState<number>(-1);
   const [colMeanings, setColMeanings] = useState<Record<string, number>>({});
+  const [errs, setErrs] = useState<string[]>([]);
+  const { mutateAsync: createTransactions, isPending } = useCreateTransaction();
 
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
@@ -23,8 +26,19 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
     );
   };
 
-  const prepareAndPostData = () => {
-    const transactions: CreateTransaction[] = [];
+  const prepareAndPostData = async () => {
+    setErrs([]);
+    if (firstDataRow < 0 || Object.keys(colMeanings).length < 1) {
+      console.log(firstDataRow);
+      console.log(colMeanings);
+      setErrs((prev) => [
+        ...prev,
+        "Must set first data row and annotate columns!",
+      ]);
+      return;
+    }
+
+    const transactions: CreateTransactionRequest[] = [];
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
       transactions.push({
@@ -33,6 +47,12 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
         inflow: Number(row[colMeanings["inflow"]]),
         outflow: Number(row[colMeanings["outflow"]]),
       });
+    }
+
+    try {
+      await createTransactions(transactions);
+    } catch (error) {
+      setErrs((prev) => [...prev, error as string]);
     }
   };
 
@@ -98,14 +118,23 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
             </table>
           </div>
           <p>Use these dropdowns to select what each column represents</p>{" "}
-          <div className="flex justify-end mt-3">
-            <Button
-              type="button"
-              variant="primary"
-              onClick={() => prepareAndPostData()}
-            >
-              Next
-            </Button>
+          <div className="flex items-center mt-3">
+            <div className="grow">
+              {errs.map((err, i) => (
+                <p className="text-danger" key={i}>
+                  {err}
+                </p>
+              ))}
+            </div>
+            <div>
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => prepareAndPostData()}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </>
       ) : (

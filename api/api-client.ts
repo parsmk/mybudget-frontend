@@ -1,3 +1,4 @@
+import { CreateTransactionRequest, Transaction } from "./account";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
@@ -13,6 +14,7 @@ export class APIClientError extends Error {
 export class APIClient {
   private readonly baseURL = process.env.NEXT_PUBLIC_API_URL;
 
+  // AUTH
   public async signup(data: SignupRequest) {
     return this.request<void>(
       "signup",
@@ -42,6 +44,16 @@ export class APIClient {
   private async refreshAccessToken() {
     return this.request<void>("refresh", { method: "POST" }, false);
   }
+  // ENDOF AUTH
+
+  // TRANSACTIONS
+  public async createTransactions(data: CreateTransactionRequest[]) {
+    return this.request<Transaction>("transaction/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+  // ENDOF TRANSACTIONS
 
   private async request<T>(
     path: string,
