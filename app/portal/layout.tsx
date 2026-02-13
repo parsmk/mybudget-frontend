@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/navigation/Navbar";
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const PortalLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen">
       <Navbar />
@@ -9,4 +9,4 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default DashboardLayout;
+export default PortalLayout;

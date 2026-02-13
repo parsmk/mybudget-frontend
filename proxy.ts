@@ -26,5 +26,5 @@ const proxy = async (request: NextRequest) => {
 export default proxy;
 
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: "/portal/:path*",
 };

@@ -24,7 +24,7 @@ export const LoginForm = () => {
         password,
       });
 
-      router.push(ROUTES.DASHBOARD);
+      router.push(ROUTES.PORTAL.DASHBOARD);
     } catch (errs) {
       setErrs((prev) => [...prev, errs as string]);
     }

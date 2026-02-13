@@ -13,8 +13,12 @@ export const Navbar = () => {
     <div className="h-full flex flex-col p-2 bg-primary">
       <div className="grow">
         <NavItem
-          onClick={() => router.push(ROUTES.DASHBOARD)}
+          onClick={() => router.push(ROUTES.PORTAL.DASHBOARD)}
           label="Dashboard"
+        />
+        <NavItem
+          onClick={() => router.push(ROUTES.PORTAL.SYNOPSIS)}
+          label="Synopsis"
         />
         <NavItem label="Budget" />
         <NavItem label="Linked Accounts" />
