@@ -10,7 +10,7 @@ export const Navbar = () => {
   const router = useRouter();
 
   return (
-    <div className="h-full flex flex-col p-2 bg-primary">
+    <div className="flex sm:flex-col p-2 bg-primary">
       <div className="grow">
         <NavItem
           onClick={() => router.push(ROUTES.PORTAL.DASHBOARD)}
@@ -20,8 +20,7 @@ export const Navbar = () => {
           onClick={() => router.push(ROUTES.PORTAL.SYNOPSIS)}
           label="Synopsis"
         />
-        <NavItem label="Budget" />
-        <NavItem label="Linked Accounts" />
+        <NavItem label="Accounts" />
       </div>
       <div>
         <NavItem
