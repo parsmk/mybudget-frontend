@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionTable } from "@/components/transactions/TransactionTable";
+import { TransactionTable } from "@/components/TransactionTable";
 import { useTransactions } from "@/hooks/transactions/useTransactions";
 
 const SynopsisPage = () => {
