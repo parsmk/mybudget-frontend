@@ -44,7 +44,7 @@ const HomePage = () => {
               ${visibleComp === "login" || visibleComp === "signup" ? `${visibleClasses} p-5 sm:w-100 sm:p-10` : invisibleClasses}`}
           >
             <BackIcon
-              className={`absolute top-4.5 left-2 sm:top-8.5 sm:left-7 size-10 cursor-pointer dark:fill-white transition hover:fill-primary`}
+              className={`absolute top-4.5 left-2 sm:top-8.5 sm:left-7 size-10 dark:text-white transition hover:text-primary`}
               onClick={() => setVisibleComp("btns")}
             />
             {visibleComp === "login" ? (
