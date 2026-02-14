@@ -56,9 +56,7 @@ export class APIClient {
   }
 
   public async getTransactions() {
-    return this.request<Transaction[]>("transaction/", {
-      method: "GET",
-    });
+    return this.request<Transaction[]>("transaction/", { method: "GET" });
   }
   // ENDOF TRANSACTIONS
 
