@@ -1,3 +1,4 @@
+import { Category, CreateCategoryRequest } from "./category";
 import { CreateTransactionRequest, Transaction } from "./transaction";
 import { LoginRequest, SignupRequest } from "./user";
 
@@ -60,6 +61,30 @@ export class APIClient {
     });
   }
   // ENDOF TRANSACTIONS
+
+  // CATEGORIES
+  public async createCategory(data: CreateCategoryRequest) {
+    return this.request<Category>("category/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async getCategories() {
+    return this.request<Category[]>("category/", { method: "GET" });
+  }
+
+  public async editCategory(data: Category) {
+    return this.request<Category>(`category/${data.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async deleteCategory(id: string) {
+    return this.request<void>(`category/${id}`, { method: " DELETE" });
+  }
+  // ENDOF CATEGORIES
 
   private async request<T>(
     path: string,
