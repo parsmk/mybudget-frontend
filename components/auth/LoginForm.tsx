@@ -39,13 +39,13 @@ export const LoginForm = () => {
           name="email"
           label="Email"
           placeholder="example@gmail.com..."
-          onChange={setEmail}
+          onChange={(e) => setEmail(e.currentTarget.value)}
         />
         <InputField
           type="password"
           name="password"
           label="Password"
-          onChange={setPassword}
+          onChange={(e) => setPassword(e.currentTarget.value)}
         />
         <Button type="submit" size="md" variant="primary">
           Login

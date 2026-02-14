@@ -46,19 +46,19 @@ export const SignupForm = () => {
           name="email"
           label="Email"
           placeholder="example@gmail.com..."
-          onChange={setEmail}
+          onChange={(e) => setEmail(e.currentTarget.value)}
         />
         <InputField
           type="password"
           name="password"
           label="Password"
-          onChange={setPassword}
+          onChange={(e) => setPassword(e.currentTarget.value)}
         />
         <InputField
           type="password"
           name="confirmPass"
           label="Confirm Password"
-          onChange={setConfirmPass}
+          onChange={(e) => setConfirmPass(e.currentTarget.value)}
         />
         <Button type="submit" size="md" variant="primary">
           Sign Up

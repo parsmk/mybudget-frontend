@@ -1,11 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 type InputFieldProps = {
   type: "text" | "password";
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 export const InputField = ({
@@ -17,14 +17,16 @@ export const InputField = ({
 }: InputFieldProps) => {
   return (
     <div className="w-full">
-      <label className="block my-1" htmlFor={name}>
-        {label}
-      </label>
+      {label && (
+        <label className="block my-1" htmlFor={name}>
+          {label}
+        </label>
+      )}
       <input
         type={type}
         name={name}
         placeholder={placeholder ?? `${label}...`}
-        onChange={(e) => onChange(e.currentTarget.value)}
+        onChange={(e) => onChange(e)}
         className={`
             p-2 rounded-md w-full
             border-1 border-foreground/20 text-foreground/50
