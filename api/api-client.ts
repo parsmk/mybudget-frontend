@@ -49,7 +49,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<Transaction>("transaction/create", {
+    return this.request<Transaction>("transaction/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -64,7 +64,7 @@ export class APIClient {
 
   // CATEGORIES
   public async createCategory(data: CreateCategoryRequest) {
-    return this.request<Category>("category/create", {
+    return this.request<Category>("category/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -82,7 +82,7 @@ export class APIClient {
   }
 
   public async deleteCategory(id: string) {
-    return this.request<void>(`category/${id}`, { method: " DELETE" });
+    return this.request<void>(`category/${id}`, { method: "DELETE" });
   }
   // ENDOF CATEGORIES
 
