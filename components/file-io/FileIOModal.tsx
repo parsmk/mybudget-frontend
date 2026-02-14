@@ -14,9 +14,11 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [sheetData, setSheetData] = useState<string[][]>([]);
   const [firstDataRow, setFirstDataRow] = useState<number>(-1);
-  const [colMeanings, setColMeanings] = useState<Record<string, number>>({});
+  const [colAnnotations, setColAnnotations] = useState<Record<string, number>>(
+    {},
+  );
   const [errs, setErrs] = useState<string[]>([]);
-  const { mutateAsync: createTransactions, isPending } = useCreateTransaction();
+  const { mutateAsync: createTransactions } = useCreateTransaction();
 
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
@@ -28,9 +30,7 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
 
   const prepareAndPostData = async () => {
     setErrs([]);
-    if (firstDataRow < 0 || Object.keys(colMeanings).length < 1) {
-      console.log(firstDataRow);
-      console.log(colMeanings);
+    if (firstDataRow < 0 || Object.keys(colAnnotations).length < 1) {
       setErrs((prev) => [
         ...prev,
         "Must set first data row and annotate columns!",
@@ -42,10 +42,10 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
       transactions.push({
-        date: row[colMeanings["date"]],
-        payee: row[colMeanings["payee"]],
-        inflow: Number(row[colMeanings["inflow"]]),
-        outflow: Number(row[colMeanings["outflow"]]),
+        date: row[colAnnotations["date"]],
+        payee: row[colAnnotations["payee"]],
+        inflow: Number(row[colAnnotations["inflow"]]),
+        outflow: Number(row[colAnnotations["outflow"]]),
       });
     }
 
@@ -98,7 +98,7 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
                           onChange={(e) => {
                             const value = e.currentTarget.value;
                             if (!value) return;
-                            setColMeanings((prev) => ({
+                            setColAnnotations((prev) => ({
                               ...prev,
                               [value]: i,
                             }));
