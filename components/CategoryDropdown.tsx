@@ -1,4 +1,4 @@
-import { useGetCategories } from "@/hooks/categories/useGetCategories";
+import { useCategories } from "@/hooks/categories/useCategories";
 import { Dropdown } from "./ui-kit/Dropdown";
 import { Category } from "@/api/category";
 import React, { Dispatch, SetStateAction } from "react";
@@ -14,7 +14,7 @@ export const CategoryDropdown = ({
   setValue,
   onChange,
 }: CategoryDropdownProps) => {
-  const { data: categories } = useGetCategories();
+  const { data: categories } = useCategories();
 
   return (
     <Dropdown

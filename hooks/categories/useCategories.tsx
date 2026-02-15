@@ -1,7 +1,7 @@
 import { useApiClient } from "@/providers/ApiClientProvider";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetCategories = () => {
+export const useCategories = () => {
   const apiClient = useApiClient();
 
   return useQuery({
