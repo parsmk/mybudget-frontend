@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export type CreateTransactionRequest = {
   date: string;
   payee: string;
@@ -9,7 +11,7 @@ export type Transaction = {
   id: string;
   date: string;
   payee: string;
-  category?: string;
+  category: Category;
   inflow?: number;
   outflow?: number;
 };

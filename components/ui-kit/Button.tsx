@@ -11,6 +11,7 @@ type ButtonProps = {
   variant?: ButtonVariants;
   size?: ButtonSizes;
   children?: React.ReactNode;
+  disabled?: boolean;
   onClick?: () => void;
 };
 
@@ -19,6 +20,7 @@ export const Button = ({
   variant = "primary",
   size = "md",
   children,
+  disabled = false,
   onClick,
 }: ButtonProps) => {
   const variantClasses: Record<ButtonVariants, string> = {
@@ -32,6 +34,10 @@ export const Button = ({
       "bg-background text-foreground/80 outline-foreground/80 hover:text-foreground hover:outline-foreground",
   };
 
+  const disabledClass = disabled
+    ? "opacity-50 cursor-not-allowed"
+    : "cursor-pointer";
+
   const sizeClasses: Record<ButtonSizes, string> = {
     sm: "w-[5rem] h-[2rem]",
     md: "w-[10rem] h-[3rem]",
@@ -40,14 +46,8 @@ export const Button = ({
 
   return (
     <button
-      className={`
-        block rounded-md 
-        text-center font-semibold
-        outline outline-1.5
-        transition cursor-pointer
-        ${variantClasses[variant]}
-        ${sizeClasses[size]}
-      `}
+      disabled={disabled}
+      className={`block rounded-md text-center font-semibold outline outline-1.5 transition ${disabledClass} ${variantClasses[variant]} ${sizeClasses[size]}`}
       type={type}
       onClick={() => onClick?.()}
     >

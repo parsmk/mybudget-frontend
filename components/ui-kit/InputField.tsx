@@ -1,10 +1,10 @@
 import React, { forwardRef } from "react";
 
-type InputFieldTypes = "text" | "password";
+export type InputFieldTypes = "text" | "password" | "date" | "number";
 
-type InputFieldStates = "default" | "disabled" | "display";
+export type InputFieldStates = "default" | "disabled" | "display";
 
-type InputFieldVariants = "default" | "grid";
+export type InputFieldVariants = "default" | "grid";
 
 type InputFieldProps = {
   type: InputFieldTypes;
@@ -12,12 +12,13 @@ type InputFieldProps = {
   label?: string;
   placeholder?: string;
   state?: InputFieldStates;
-  value?: string;
+  value?: string | number;
   variant?: InputFieldVariants;
   defaultValue?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
@@ -34,6 +35,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       onChange,
       onKeyDown,
       onBlur,
+      onFocus,
     },
     ref,
   ) => {
@@ -45,8 +47,8 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 
     const variantClasses: Record<InputFieldVariants, string> = {
       default:
-        "border-foreground/20 hover:border-foreground/50 hover:text-foreground",
-      grid: "border-foreground/0 hover:border-foreground/50",
+        "border-foreground/20 hover:border-foreground/50 hover:text-foreground focus:text-foreground",
+      grid: "text-foreground/75 border-foreground/0 hover:border-foreground/50",
     };
 
     return (
@@ -66,9 +68,10 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           onChange={onChange}
           onKeyDown={onKeyDown}
           onBlur={onBlur}
+          onFocus={onFocus}
           className={`
-            border-1 p-2 rounded-md w-full text-foreground/50 
-            transition focus:border-foreground/50 focus:text-foreground focus:shadow-sm focus:outline-none ${stateClasses[state]} ${variantClasses[variant]}`}
+            border-1 p-2 rounded-md w-full
+            transition focus:border-foreground/50 focus:outline-none hover:text-foreground focus:text-foreground ${stateClasses[state]} ${variantClasses[variant]}`}
         />
       </div>
     );
