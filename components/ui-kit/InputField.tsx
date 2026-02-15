@@ -68,7 +68,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           onBlur={onBlur}
           className={`
             border-1 p-2 rounded-md w-full text-foreground/50 
-            transition focus:border-foreground/50 focus:text-foreground focus:shadow-sm ${stateClasses[state]} ${variantClasses[variant]}`}
+            transition focus:border-foreground/50 focus:text-foreground focus:shadow-sm focus:outline-none ${stateClasses[state]} ${variantClasses[variant]}`}
         />
       </div>
     );
