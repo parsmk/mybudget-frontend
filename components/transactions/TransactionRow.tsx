@@ -4,12 +4,18 @@ import { useMemo, useState } from "react";
 import { Category } from "@/api/category";
 import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
+import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
+import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
 
 export const TransactionRow = ({
   transaction,
 }: {
   transaction: Transaction;
 }) => {
+  const { mutateAsync: editTransaction, isPending: editing } =
+    useEditTransaction();
+  const { mutate: deleteTransaction } = useDeleteTransaction();
+
   const [cat, setCat] = useState<Category | undefined>(transaction.category);
   const [date, setDate] = useState<string>(transaction.date);
   const [payee, setPayee] = useState<string>(transaction.payee);
@@ -29,6 +35,19 @@ export const TransactionRow = ({
 
     return false;
   }, [cat, date, payee, inflow, outflow]);
+
+  const handleSubmit = async () => {
+    try {
+      await editTransaction({
+        id: transaction.id,
+        categoryID: cat?.id,
+        date: date,
+        payee: payee,
+        inflow: inflow,
+        outflow: outflow,
+      });
+    } catch (err) {}
+  };
 
   return (
     <tr className="odd:bg-primary/20 transition hover:bg-foreground/20">
@@ -87,10 +106,20 @@ export const TransactionRow = ({
       </td>
       <td className="p-2">
         <div className="h-full w-full flex items-center justify-end gap-2">
-          <Button type="button" size="sm" disabled={!hasChanged}>
+          <Button
+            type="button"
+            size="sm"
+            disabled={!hasChanged || editing}
+            onClick={async () => await handleSubmit()}
+          >
             Save
           </Button>
-          <Button type="button" size="sm" variant="danger">
+          <Button
+            type="button"
+            size="sm"
+            variant="danger"
+            onClick={() => deleteTransaction(transaction.id)}
+          >
             Delete
           </Button>
         </div>
