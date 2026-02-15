@@ -1,5 +1,9 @@
 import { Category, CreateCategoryRequest } from "./category";
-import { CreateTransactionRequest, Transaction } from "./transaction";
+import {
+  CreateTransactionRequest,
+  EditTransactionRequest,
+  Transaction,
+} from "./transaction";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
@@ -49,7 +53,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<Transaction>("transaction/", {
+    return this.request<Transaction[]>("transaction/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -57,6 +61,17 @@ export class APIClient {
 
   public async getTransactions() {
     return this.request<Transaction[]>("transaction/", { method: "GET" });
+  }
+
+  public async editTransaction(data: EditTransactionRequest) {
+    return this.request<Transaction>(`transaction/${data.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async deleteTransaction(id: string) {
+    return this.request<Transaction>(`transaction/${id}`, { method: "DELETE" });
   }
   // ENDOF TRANSACTIONS
 
@@ -80,7 +95,7 @@ export class APIClient {
   }
 
   public async deleteCategory(id: string) {
-    return this.request<void>(`category/${id}`, { method: "DELETE" });
+    return this.request<Category>(`category/${id}`, { method: "DELETE" });
   }
   // ENDOF CATEGORIES
 
