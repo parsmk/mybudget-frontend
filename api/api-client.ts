@@ -1,3 +1,4 @@
+import { Account, CreateAccountRequest } from "./account";
 import { Category, CreateCategoryRequest } from "./category";
 import {
   CreateTransactionRequest,
@@ -50,6 +51,34 @@ export class APIClient {
     return this.request<void>("refresh", { method: "POST" }, false);
   }
   // ENDOF AUTH
+
+  // CATEGORIES
+  public async createAccount(data: CreateAccountRequest) {
+    return this.request<Account>("account/", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async getAccounts() {
+    return this.request<Account[]>("account/", { method: "GET" });
+  }
+
+  public async getAccount(id: string) {
+    return this.request<Account>(`account/${id}`, { method: "GET" });
+  }
+
+  public async editAccount(data: Account) {
+    return this.request<Account>(`account/${data.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
+
+  public async deleteAccount(id: string) {
+    return this.request<Account>(`account/${id}`, { method: "DELETE" });
+  }
+  //ENDOF CATEGORIES
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
