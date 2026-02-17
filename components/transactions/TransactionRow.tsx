@@ -6,12 +6,16 @@ import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
+import { useAccount } from "@/hooks/accounts/useAccount";
 
 export const TransactionRow = ({
   transaction,
+  showAccount = false,
 }: {
   transaction: Transaction;
+  showAccount?: boolean;
 }) => {
+  const { data: account } = useAccount(transaction.accountID);
   const { mutateAsync: editTransaction, isPending: editing } =
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
@@ -39,12 +43,15 @@ export const TransactionRow = ({
   const handleSubmit = async () => {
     try {
       await editTransaction({
-        id: transaction.id,
-        categoryID: cat?.id,
-        date: date,
-        payee: payee,
-        inflow: inflow,
-        outflow: outflow,
+        patch: {
+          id: transaction.id,
+          categoryID: cat?.id,
+          date: date,
+          payee: payee,
+          inflow: inflow,
+          outflow: outflow,
+        },
+        oldAccountID: transaction.accountID,
       });
     } catch (err) {}
   };
@@ -104,6 +111,7 @@ export const TransactionRow = ({
           }}
         />
       </td>
+      {showAccount ? <td>{account?.name}</td> : null}
       <td className="p-2">
         <div className="h-full w-full flex items-center justify-end gap-2">
           <Button

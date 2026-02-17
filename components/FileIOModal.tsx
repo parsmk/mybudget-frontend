@@ -4,21 +4,28 @@ import { Button } from "./ui-kit/Button";
 import * as XLSX from "xlsx";
 import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/app/_route-map";
 
 type FileIOModalProps = {
   open: boolean;
   close: () => void;
+  accountID: string;
 };
 
-export const FileIOModal = ({ open, close }: FileIOModalProps) => {
+export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
+  const router = useRouter();
+
+  const { mutateAsync: createTransactions } = useCreateTransaction();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [sheetData, setSheetData] = useState<string[][]>([]);
   const [firstDataRow, setFirstDataRow] = useState<number>(-1);
   const [colAnnotations, setColAnnotations] = useState<Record<string, number>>(
     {},
   );
+
   const [errs, setErrs] = useState<string[]>([]);
-  const { mutateAsync: createTransactions } = useCreateTransaction();
 
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
@@ -42,17 +49,20 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
       transactions.push({
-        date: row[colAnnotations["date"]],
+        date: new Date(row[colAnnotations["date"]]).toDateString(),
         payee: row[colAnnotations["payee"]],
         inflow: Number(row[colAnnotations["inflow"]]),
         outflow: Number(row[colAnnotations["outflow"]]),
+        accountID: accountID,
       });
     }
 
     try {
       await createTransactions(transactions);
+      router.push(ROUTES.PORTAL.ACCOUNT(accountID));
+      close();
     } catch (error) {
-      setErrs((prev) => [...prev, error as string]);
+      setErrs((prev) => [...prev, String(error)]);
     }
   };
 
@@ -119,7 +129,7 @@ export const FileIOModal = ({ open, close }: FileIOModalProps) => {
           </div>
           <p>Use these dropdowns to select what each column represents</p>{" "}
           <div className="flex items-center mt-3">
-            <div className="grow">
+            <div className="grow flex flex-wrap mx-2">
               {errs.map((err, i) => (
                 <p className="text-danger" key={i}>
                   {err}

@@ -2,6 +2,7 @@ import { Account, CreateAccountRequest } from "./account";
 import { Category, CreateCategoryRequest } from "./category";
 import {
   CreateTransactionRequest,
+  CreateTransactionResponse,
   EditTransactionRequest,
   Transaction,
 } from "./transaction";
@@ -88,7 +89,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<Transaction[]>("transaction/", {
+    return this.request<CreateTransactionResponse>("transaction/", {
       method: "POST",
       body: JSON.stringify(data),
     });
