@@ -7,6 +7,7 @@ type DropdownProps<T> = {
   value?: T;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
   defaultOption?: string;
+  disabled?: boolean;
 };
 
 export const Dropdown = <T,>({
@@ -16,12 +17,14 @@ export const Dropdown = <T,>({
   value,
   onChange,
   defaultOption,
+  disabled,
 }: DropdownProps<T>) => {
   return (
     <select
       className="w-full h-full rounded-md focus:outline-none focus:ring-none"
       value={value ? idFn(value) : "none"}
       onChange={(e) => onChange?.(e)}
+      disabled={disabled}
     >
       {defaultOption ? (
         <option value={undefined} className={`text-foreground/50`}>

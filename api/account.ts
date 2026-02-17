@@ -12,6 +12,6 @@ export type Account = {
 
 export type CreateAccountRequest = {
   name: string;
-  balance: string;
+  balance: number;
   type: AccountType;
 };
