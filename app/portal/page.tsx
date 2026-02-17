@@ -12,7 +12,11 @@ const PortalLandingPage = () => {
   return (
     <div className="h-full grid gap-10 grid-cols-2 grid-rows-2 p-10">
       <div className="col-span-full">
-        <DashboardCard>Welcome user!</DashboardCard>
+        <DashboardCard>
+          <h2 className="h-full text-5xl w-full flex justify-center items-center">
+            Welcome user!
+          </h2>
+        </DashboardCard>
       </div>
       <CategoriesCard categories={categories} />
       <AccountsCard accounts={accounts} />
