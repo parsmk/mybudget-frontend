@@ -8,10 +8,13 @@ export const useCreateTransaction = () => {
 
   return useMutation({
     mutationFn: async (data: CreateTransactionRequest[]) => {
-      await apiClient.createTransactions(data);
+      return await apiClient.createTransactions(data);
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["accountTransactions", data[0].accountID],
+      });
     },
   });
 };

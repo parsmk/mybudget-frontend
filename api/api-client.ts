@@ -68,6 +68,12 @@ export class APIClient {
     return this.request<Account>(`account/${id}`, { method: "GET" });
   }
 
+  public async getAccountTransactions(id: string) {
+    return this.request<Transaction[]>(`account/${id}/transactions`, {
+      method: "GET",
+    });
+  }
+
   public async editAccount(data: Account) {
     return this.request<Account>(`account/${data.id}`, {
       method: "PATCH",

@@ -7,12 +7,28 @@ export const useEditTransaction = () => {
   const apiClient = useApiClient();
 
   return useMutation({
-    mutationFn: (data: EditTransactionRequest) => {
-      return apiClient.editTransaction(data);
+    mutationFn: ({
+      patch,
+      oldAccountID,
+    }: {
+      patch: EditTransactionRequest;
+      oldAccountID: string;
+    }) => {
+      return apiClient.editTransaction(patch);
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({ queryKey: ["transactions", data.id] });
+      const oldAccountID = variables.oldAccountID;
+      const newAccountID = data.accountID;
+
+      queryClient.invalidateQueries({
+        queryKey: ["accountTransactions", oldAccountID],
+      });
+
+      if (newAccountID && oldAccountID !== newAccountID)
+        queryClient.invalidateQueries({
+          queryKey: ["accountTransactions", newAccountID],
+        });
     },
   });
 };
