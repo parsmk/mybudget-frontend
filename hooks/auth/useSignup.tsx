@@ -7,7 +7,7 @@ export const useSignup = () => {
 
   return useMutation({
     mutationFn: async (formData: SignupRequest) => {
-      await apiClient.login({
+      await apiClient.signup({
         email: formData.email,
         password: formData.password,
       });
