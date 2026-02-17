@@ -3,5 +3,6 @@ export const ROUTES = {
   PORTAL: {
     DASHBOARD: "/portal/",
     SYNOPSIS: "/portal/synopsis",
+    ACCOUNT: (id: string) => `/portal/${id}`,
   },
 };
