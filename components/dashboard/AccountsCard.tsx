@@ -54,8 +54,8 @@ export const AccountsCard = ({
         <tbody className="border-1 border-foreground/10">
           {accounts &&
             accounts.map((a) => (
-              <tr className={rowClasses}>
-                <AccountRow key={a.id} account={a} />
+              <tr key={a.id} className={rowClasses}>
+                <AccountRow account={a} />
               </tr>
             ))}
 
