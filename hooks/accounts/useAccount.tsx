@@ -8,6 +8,6 @@ export const useAccount = (id: string) => {
     queryFn: () => {
       return apiClient.getAccount(id);
     },
-    queryKey: ["account", id],
+    queryKey: ["accounts", id],
   });
 };
