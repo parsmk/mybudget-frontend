@@ -49,7 +49,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
       transactions.push({
-        date: new Date(row[colAnnotations["date"]]).toDateString(),
+        date: new Date(row[colAnnotations["date"]]).toISOString(),
         payee: row[colAnnotations["payee"]],
         inflow: Number(row[colAnnotations["inflow"]]),
         outflow: Number(row[colAnnotations["outflow"]]),

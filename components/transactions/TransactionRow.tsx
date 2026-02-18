@@ -21,28 +21,28 @@ export const TransactionRow = ({
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
   const [cat, setCat] = useState<Category | undefined>(transaction.category);
-  const [date, setDate] = useState<string>(transaction.date);
+  const [date, setDate] = useState<string>(transaction.date.slice(0, 10));
   const [payee, setPayee] = useState<string>(transaction.payee);
-  const [inflow, setInflow] = useState<number | undefined>(transaction.inflow);
+  const [inflow, setInflow] = useState<number | undefined>(
+    Number(transaction.inflow),
+  );
   const [outflow, setOutflow] = useState<number | undefined>(
-    transaction.outflow,
+    Number(transaction.outflow),
   );
 
   const hasChanged = useMemo(() => {
-    console.log(transaction.category);
-    console.log(cat);
     if (cat && cat !== transaction.category) return true;
-    if (date !== transaction.date) return true;
+    if (date !== transaction.date.slice(0, 10)) return true;
     if (payee !== transaction.payee) return true;
-    if (inflow !== transaction.inflow) return true;
-    if (outflow !== transaction.outflow) return true;
+    if (String(inflow) !== transaction.inflow) return true;
+    if (String(outflow) !== transaction.outflow) return true;
 
     return false;
   }, [cat, date, payee, inflow, outflow]);
 
   const handleSubmit = async () => {
     try {
-      await editTransaction({
+      const updated = await editTransaction({
         patch: {
           id: transaction.id,
           categoryID: cat?.id,
@@ -53,6 +53,12 @@ export const TransactionRow = ({
         },
         oldAccountID: transaction.accountID,
       });
+
+      setCat(updated.category ?? cat);
+      setDate(updated.date.slice(0, 10));
+      setPayee(updated.payee);
+      setInflow(Number(updated.inflow ?? 0));
+      setOutflow(Number(updated.outflow ?? 0));
     } catch (err) {}
   };
 
@@ -65,7 +71,6 @@ export const TransactionRow = ({
           value={date}
           variant="grid"
           onChange={(e) => setDate(e.currentTarget.value)}
-          onBlur={() => setDate(transaction.date)}
         />
       </td>
       <td className="p-2 border-x-1 border-foreground/50">
@@ -75,7 +80,6 @@ export const TransactionRow = ({
           value={payee}
           variant="grid"
           onChange={(e) => setPayee(e.currentTarget.value)}
-          onBlur={() => setPayee(transaction.payee)}
         />
       </td>
       <td className="p-2 border-x-1 border-foreground/50">
@@ -85,7 +89,7 @@ export const TransactionRow = ({
         <InputField
           type="number"
           name="inflow"
-          value={inflow ? Number(inflow).toFixed(2) : 0}
+          value={inflow != null ? Number(inflow).toFixed(2) : 0}
           placeholder=""
           variant="grid"
           onChange={(e) => setInflow(Number(e.currentTarget.value))}
@@ -101,7 +105,7 @@ export const TransactionRow = ({
           type="number"
           name="outflow"
           placeholder=""
-          value={outflow ? Number(outflow).toFixed(2) : 0}
+          value={outflow != null ? Number(outflow).toFixed(2) : 0}
           variant="grid"
           onChange={(e) => setOutflow(Number(e.currentTarget.value))}
           onBlur={(e) => {
