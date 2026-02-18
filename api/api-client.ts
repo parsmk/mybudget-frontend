@@ -1,4 +1,8 @@
-import { Account, CreateAccountRequest } from "./account";
+import {
+  Account,
+  AccountAnalyticsResponse,
+  CreateAccountRequest,
+} from "./account";
 import { Category, CreateCategoryRequest } from "./category";
 import {
   CreateTransactionRequest,
@@ -71,6 +75,12 @@ export class APIClient {
 
   public async getAccountTransactions(id: string) {
     return this.request<Transaction[]>(`account/${id}/transactions`, {
+      method: "GET",
+    });
+  }
+
+  public async getAccountAnalytics(id: string) {
+    return this.request<AccountAnalyticsResponse[]>(`account/${id}/analytics`, {
       method: "GET",
     });
   }

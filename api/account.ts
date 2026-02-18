@@ -15,3 +15,9 @@ export type CreateAccountRequest = {
   balance: number;
   type: AccountType;
 };
+
+export type AccountAnalyticsResponse = {
+  categoryID: string;
+  amount: number;
+  pct: number;
+};
