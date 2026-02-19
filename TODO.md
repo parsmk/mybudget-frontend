@@ -2,6 +2,7 @@
 
 - Validations
 - Error Handling
+- Loading states
 - Mobile View
 
 ## Auth
