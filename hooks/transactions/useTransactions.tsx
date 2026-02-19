@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { APIClient } from "../../api/api-client";
+import { useApiClient } from "@/providers/ApiClientProvider";
 
 export const useTransactions = () => {
-  const apiClient = new APIClient();
+  const apiClient = useApiClient();
 
   return useQuery({
     queryKey: ["transactions"],
