@@ -119,6 +119,13 @@ export class APIClient {
   public async deleteTransaction(id: string) {
     return this.request<Transaction>(`transaction/${id}`, { method: "DELETE" });
   }
+
+  public async deleteTransactions(ids: string[]) {
+    return this.request<Transaction[]>(`transaction/`, {
+      method: "DELETE",
+      body: JSON.stringify(ids),
+    });
+  }
   // ENDOF TRANSACTIONS
 
   // CATEGORIES
