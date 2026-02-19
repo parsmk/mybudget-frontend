@@ -14,6 +14,9 @@ export const useDeleteTransaction = () => {
       queryClient.invalidateQueries({
         queryKey: ["accountTransactions", data.accountID],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["accountAnalytics", data.accountID],
+      });
     },
   });
 };

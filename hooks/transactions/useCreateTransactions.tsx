@@ -15,6 +15,9 @@ export const useCreateTransaction = () => {
       queryClient.invalidateQueries({
         queryKey: ["accountTransactions", data.success.uploaded[0].accountID],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["accountAnalytics", data.success.uploaded[0].accountID],
+      });
     },
   });
 };
