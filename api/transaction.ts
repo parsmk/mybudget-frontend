@@ -30,6 +30,6 @@ export type Transaction = {
   payee: string;
   category?: Category;
   accountID: string;
-  inflow?: string;
-  outflow?: string;
+  inflow?: number;
+  outflow?: number;
 };

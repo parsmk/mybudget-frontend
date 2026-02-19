@@ -39,8 +39,8 @@ export const TransactionRow = ({
     if (cat && cat !== transaction.category) return true;
     if (date !== transaction.date.slice(0, 10)) return true;
     if (payee !== transaction.payee) return true;
-    if (String(inflow) !== transaction.inflow) return true;
-    if (String(outflow) !== transaction.outflow) return true;
+    if (inflow !== transaction.inflow) return true;
+    if (outflow !== transaction.outflow) return true;
 
     return false;
   }, [cat, date, payee, inflow, outflow]);
@@ -68,8 +68,8 @@ export const TransactionRow = ({
       setCat(updated.category ?? cat);
       setDate(updated.date.slice(0, 10));
       setPayee(updated.payee);
-      setInflow(Number(updated.inflow ?? 0));
-      setOutflow(Number(updated.outflow ?? 0));
+      setInflow(updated.inflow ?? 0);
+      setOutflow(updated.outflow ?? 0);
     } catch (err) {}
   };
 
