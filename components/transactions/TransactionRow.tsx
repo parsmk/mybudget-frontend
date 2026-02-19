@@ -47,15 +47,21 @@ export const TransactionRow = ({
 
   const handleSubmit = async () => {
     try {
+      const patch = {
+        id: transaction.id,
+        categoryID: cat?.id === transaction.category?.id ? undefined : cat?.id,
+        date: date === transaction.date ? undefined : date,
+        payee: payee === transaction.payee ? undefined : payee,
+        inflow: inflow === transaction.inflow ? undefined : inflow,
+        outflow: outflow === transaction.outflow ? undefined : outflow,
+      };
+
+      const cleanedPatch = Object.fromEntries(
+        Object.entries(patch).filter(([, v]) => v !== undefined),
+      ) as typeof patch;
+
       const updated = await editTransaction({
-        patch: {
-          id: transaction.id,
-          categoryID: cat?.id,
-          date: date,
-          payee: payee,
-          inflow: inflow,
-          outflow: outflow,
-        },
+        patch: cleanedPatch,
         oldAccountID: transaction.accountID,
       });
 
