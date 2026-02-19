@@ -58,7 +58,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     }
 
     try {
-      await createTransactions(transactions);
+      await createTransactions({ data: transactions, accountID });
       router.push(ROUTES.PORTAL.ACCOUNT(accountID));
       close();
     } catch (error) {

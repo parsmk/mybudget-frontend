@@ -11,12 +11,10 @@ export const useDeleteTransactions = () => {
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({
-        queryKey: ["accountTransactions", data[0].accountID],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["accountAnalytics", data[0].accountID],
-      });
+      const accountIds = new Set(data.map((t) => t.accountID));
+      for (const id of accountIds) {
+        queryClient.invalidateQueries({ queryKey: ["accounts", id] });
+      }
     },
   });
 };

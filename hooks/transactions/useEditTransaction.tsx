@@ -22,19 +22,12 @@ export const useEditTransaction = () => {
       const newAccountID = data.accountID;
 
       queryClient.invalidateQueries({
-        queryKey: ["accountTransactions", oldAccountID],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["accountAnalytics", oldAccountID],
+        queryKey: ["accounts", oldAccountID],
       });
 
       if (newAccountID && oldAccountID !== newAccountID) {
         queryClient.invalidateQueries({
-          queryKey: ["accountTransactions", newAccountID],
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: ["accountAnalytics", newAccountID],
+          queryKey: ["accounts", newAccountID],
         });
       }
     },

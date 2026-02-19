@@ -4,7 +4,7 @@ import { FileIOModal } from "@/components/FileIOModal";
 import { TransactionTable } from "@/components/transactions/TransactionTable";
 import { Button } from "@/components/ui-kit/Button";
 import { useAccount } from "@/hooks/accounts/useAccount";
-import { useAccountTransactions } from "@/hooks/accounts/useAccountTransactions";
+import { useAccountTransactions } from "@/hooks/transactions/useAccountTransactions";
 import { use, useState } from "react";
 
 const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {

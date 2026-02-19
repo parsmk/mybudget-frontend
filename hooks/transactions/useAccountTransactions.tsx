@@ -8,6 +8,6 @@ export const useAccountTransactions = (id: string) => {
     queryFn: () => {
       return apiClient.getAccountTransactions(id);
     },
-    queryKey: ["accountTransactions", id],
+    queryKey: ["transactions", "list", id],
   });
 };

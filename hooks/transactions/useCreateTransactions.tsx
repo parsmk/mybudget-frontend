@@ -7,16 +7,19 @@ export const useCreateTransaction = () => {
   const apiClient = useApiClient();
 
   return useMutation({
-    mutationFn: async (data: CreateTransactionRequest[]) => {
+    mutationFn: async ({
+      data,
+      accountID,
+    }: {
+      data: CreateTransactionRequest[];
+      accountID: string;
+    }) => {
       return await apiClient.createTransactions(data);
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({
-        queryKey: ["accountTransactions", data.success.uploaded[0].accountID],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["accountAnalytics", data.success.uploaded[0].accountID],
+        queryKey: ["accounts", variables.accountID],
       });
     },
   });

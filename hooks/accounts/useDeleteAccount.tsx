@@ -11,7 +11,6 @@ export const useDeleteAccount = () => {
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["accounts", data.id] });
     },
   });
 };
