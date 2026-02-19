@@ -1,18 +1,23 @@
 import { CategoryDropdown } from "../CategoryDropdown";
 import { Transaction } from "@/api/transaction";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Category } from "@/api/category";
 import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
 import { useAccount } from "@/hooks/accounts/useAccount";
+import { TransactionCell } from "./TransactionCell";
 
 export const TransactionRow = ({
   transaction,
+  selected = false,
+  setSelected,
   showAccount = false,
 }: {
   transaction: Transaction;
+  selected: boolean;
+  setSelected: (id: string) => void;
   showAccount?: boolean;
 }) => {
   const { data: account } = useAccount(transaction.accountID);
@@ -63,8 +68,16 @@ export const TransactionRow = ({
   };
 
   return (
-    <tr className="odd:bg-primary/20 transition hover:bg-foreground/20">
-      <td className="p-2">
+    <tr className="even:bg-primary/20 transition hover:bg-foreground/20 divide-x divide-foreground/75">
+      <TransactionCell>
+        <input
+          className="mx-auto w-full h-full"
+          type="checkbox"
+          checked={selected}
+          onChange={() => setSelected(transaction.id)}
+        />
+      </TransactionCell>
+      <TransactionCell>
         <InputField
           type="date"
           name="date"
@@ -72,8 +85,8 @@ export const TransactionRow = ({
           variant="grid"
           onChange={(e) => setDate(e.currentTarget.value)}
         />
-      </td>
-      <td className="p-2 border-x-1 border-foreground/50">
+      </TransactionCell>
+      <TransactionCell>
         <InputField
           type="text"
           name="payee"
@@ -81,11 +94,11 @@ export const TransactionRow = ({
           variant="grid"
           onChange={(e) => setPayee(e.currentTarget.value)}
         />
-      </td>
-      <td className="p-2 border-x-1 border-foreground/50">
+      </TransactionCell>
+      <TransactionCell>
         <CategoryDropdown setValue={setCat} value={cat} />
-      </td>
-      <td className="p-2 border-x-1 border-foreground/50">
+      </TransactionCell>
+      <TransactionCell>
         <InputField
           type="number"
           name="inflow"
@@ -99,8 +112,8 @@ export const TransactionRow = ({
             e.currentTarget.value = Number(val).toFixed(2);
           }}
         />
-      </td>
-      <td className="p-2">
+      </TransactionCell>
+      <TransactionCell>
         <InputField
           type="number"
           name="outflow"
@@ -114,10 +127,10 @@ export const TransactionRow = ({
             e.currentTarget.value = Number(val).toFixed(2);
           }}
         />
-      </td>
-      {showAccount ? <td>{account?.name}</td> : null}
-      <td className="p-2">
-        <div className="h-full w-full flex items-center justify-end gap-2">
+      </TransactionCell>
+      {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}
+      <TransactionCell>
+        <div className="h-full w-full flex items-center justify-center gap-2">
           <Button
             type="button"
             size="sm"
@@ -135,7 +148,7 @@ export const TransactionRow = ({
             Delete
           </Button>
         </div>
-      </td>
+      </TransactionCell>
     </tr>
   );
 };

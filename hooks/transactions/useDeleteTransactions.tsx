@@ -6,8 +6,8 @@ export const useDeleteTransactions = () => {
   const apiClient = useApiClient();
 
   return useMutation({
-    mutationFn: (id: string[]) => {
-      return apiClient.deleteTransactions(id);
+    mutationFn: (ids: string[]) => {
+      return apiClient.deleteTransactions(ids);
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });

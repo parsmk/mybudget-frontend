@@ -15,7 +15,7 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       {account && (
         <FileIOModal
           open={open}
@@ -36,7 +36,7 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
         </div>
       </div>
-      <div className="grow overflow-y-auto">
+      <div className="grow min-h-0 overflow-y-auto">
         <TransactionTable transactions={transactions ?? []} />
       </div>
     </div>
