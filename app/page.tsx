@@ -2,7 +2,7 @@
 
 import { LoginForm } from "@/components/auth/LoginForm";
 import { SignupForm } from "@/components/auth/SignupForm";
-import { BackIcon } from "@/components/svgs/BackIcon";
+import { LeftChevron } from "@/components/svgs/Chevrons";
 import { Button } from "@/components/ui-kit/Button";
 import { useState } from "react";
 
@@ -43,7 +43,7 @@ const HomePage = () => {
               relative flex overflow-hidden bg-tertiary/35 rounded-lg
               ${visibleComp === "login" || visibleComp === "signup" ? `${visibleClasses} p-5 sm:w-100 sm:p-10` : invisibleClasses}`}
           >
-            <BackIcon
+            <LeftChevron
               className={`absolute top-4.5 left-2 sm:top-8.5 sm:left-7 size-10 dark:text-white transition hover:text-primary`}
               onClick={() => setVisibleComp("btns")}
             />
