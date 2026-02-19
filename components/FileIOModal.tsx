@@ -48,8 +48,9 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     const transactions: CreateTransactionRequest[] = [];
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
+      console.log(row[colAnnotations["date"]]);
       transactions.push({
-        date: new Date(row[colAnnotations["date"]]).toISOString(),
+        date: row[colAnnotations["date"]],
         payee: row[colAnnotations["payee"]],
         inflow: Number(row[colAnnotations["inflow"]]),
         outflow: Number(row[colAnnotations["outflow"]]),
