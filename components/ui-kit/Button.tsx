@@ -12,6 +12,7 @@ type ButtonProps = {
   size?: ButtonSizes;
   children?: React.ReactNode;
   disabled?: boolean;
+  fullWidth?: boolean;
   onClick?: () => void;
 };
 
@@ -21,6 +22,7 @@ export const Button = ({
   size = "md",
   children,
   disabled = false,
+  fullWidth = false,
   onClick,
 }: ButtonProps) => {
   const variantClasses: Record<ButtonVariants, string> = {
@@ -39,9 +41,9 @@ export const Button = ({
     : "cursor-pointer";
 
   const sizeClasses: Record<ButtonSizes, string> = {
-    sm: "w-[5rem] h-[2rem]",
-    md: "w-[10rem] h-[3rem]",
-    lg: "w-[15rem] h-[4rem]",
+    sm: `${fullWidth ? "w-full" : "w-[5rem]"} h-[2rem]`,
+    md: `${fullWidth ? "w-full" : "w-[10rem]"} h-[3rem]`,
+    lg: `${fullWidth ? "w-full" : "w-[15rem]"} h-[4rem]`,
   };
 
   return (
