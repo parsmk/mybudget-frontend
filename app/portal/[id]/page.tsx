@@ -6,15 +6,16 @@ import { Button } from "@/components/ui-kit/Button";
 import { Dropdown } from "@/components/ui-kit/Dropdown";
 import { InputField } from "@/components/ui-kit/InputField";
 import { useAccount } from "@/hooks/accounts/useAccount";
+import { useAccountAnalytics } from "@/hooks/accounts/useAccountAnalytics";
 import { useAccountTransactions } from "@/hooks/transactions/useAccountTransactions";
 import { use, useState } from "react";
-
-type ValidPeriods = "1 month" | "3 month" | "6 month" | "12 month";
+import { Pie, PieChart } from "recharts";
 
 const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const { data: account } = useAccount(id);
   const { data: transactions } = useAccountTransactions(id);
+  const { data: analytics } = useAccountAnalytics(id);
 
   const [open, setOpen] = useState<boolean>(false);
   const [to, setTo] = useState<Date>(new Date());
@@ -48,6 +49,28 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="px-5">
           <h2 className="text-2xl font-bold">{account?.name}</h2>
           <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
+        </div>
+        <div className="px-5">
+          <PieChart
+            responsive
+            style={{
+              width: "100%",
+              height: "100%",
+              maxWidth: "500px",
+              maxHeight: "80vh",
+              aspectRatio: 1,
+            }}
+          >
+            <Pie
+              data={analytics}
+              dataKey={"amount"}
+              cx="50%"
+              cy="50%"
+              outerRadius="50%"
+              fill="#8884d8"
+              isAnimationActive
+            />
+          </PieChart>
         </div>
       </div>
       <div className="grow min-h-0 overflow-y-auto">
