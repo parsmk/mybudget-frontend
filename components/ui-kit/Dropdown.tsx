@@ -32,7 +32,7 @@ export const Dropdown = <T,>({
       disabled={disabled}
     >
       {defaultOption ? (
-        <option value={undefined} className={optionClasses}>
+        <option value={"none"} className={optionClasses}>
           {defaultOption}
         </option>
       ) : null}

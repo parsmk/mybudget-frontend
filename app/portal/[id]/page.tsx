@@ -41,8 +41,8 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <InputField label="From" type="date" />
-              <InputField label="To" type="date" />
+              <InputField name="from" label="From" type="date" />
+              <InputField name="to" label="To" type="date" />
             </div>
           </div>
         </div>

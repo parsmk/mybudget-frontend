@@ -8,6 +8,7 @@ import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
 import { useAccount } from "@/hooks/accounts/useAccount";
 import { TransactionCell } from "./TransactionCell";
+import { CurrencyField } from "../ui-kit/CurrencyField";
 
 export const TransactionRow = ({
   transaction,
@@ -28,15 +29,13 @@ export const TransactionRow = ({
   const [cat, setCat] = useState<Category | undefined>(transaction.category);
   const [date, setDate] = useState<string>(transaction.date.slice(0, 10));
   const [payee, setPayee] = useState<string>(transaction.payee);
-  const [inflow, setInflow] = useState<number | undefined>(
-    Number(transaction.inflow),
-  );
+  const [inflow, setInflow] = useState<number | undefined>(transaction.inflow);
   const [outflow, setOutflow] = useState<number | undefined>(
-    Number(transaction.outflow),
+    transaction.outflow,
   );
 
   const hasChanged = useMemo(() => {
-    if (cat && cat !== transaction.category) return true;
+    if (cat && cat.id !== transaction.category?.id) return true;
     if (date !== transaction.date.slice(0, 10)) return true;
     if (payee !== transaction.payee) return true;
     if (inflow !== transaction.inflow) return true;
@@ -56,9 +55,14 @@ export const TransactionRow = ({
         outflow: outflow === transaction.outflow ? undefined : outflow,
       };
 
+      console.log(patch.inflow);
+      console.log(patch.outflow);
+
       const cleanedPatch = Object.fromEntries(
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as typeof patch;
+
+      console.log(cleanedPatch);
 
       const updated = await editTransaction({
         patch: cleanedPatch,
@@ -68,8 +72,8 @@ export const TransactionRow = ({
       setCat(updated.category ?? cat);
       setDate(updated.date.slice(0, 10));
       setPayee(updated.payee);
-      setInflow(updated.inflow ?? 0);
-      setOutflow(updated.outflow ?? 0);
+      setInflow(updated.inflow);
+      setOutflow(updated.outflow);
     } catch (err) {}
   };
 
@@ -105,33 +109,19 @@ export const TransactionRow = ({
         <CategoryDropdown setValue={setCat} value={cat} />
       </TransactionCell>
       <TransactionCell>
-        <InputField
-          type="number"
+        <CurrencyField
           name="inflow"
-          value={inflow != null ? Number(inflow).toFixed(2) : 0}
-          placeholder=""
+          value={inflow}
           variant="grid"
-          onChange={(e) => setInflow(Number(e.currentTarget.value))}
-          onBlur={(e) => {
-            const val = e.currentTarget.value;
-            if (!val) return;
-            e.currentTarget.value = Number(val).toFixed(2);
-          }}
+          setValue={setInflow}
         />
       </TransactionCell>
       <TransactionCell>
-        <InputField
-          type="number"
+        <CurrencyField
           name="outflow"
-          placeholder=""
-          value={outflow != null ? Number(outflow).toFixed(2) : 0}
+          value={outflow}
           variant="grid"
-          onChange={(e) => setOutflow(Number(e.currentTarget.value))}
-          onBlur={(e) => {
-            const val = e.currentTarget.value;
-            if (!val) return;
-            e.currentTarget.value = Number(val).toFixed(2);
-          }}
+          setValue={setOutflow}
         />
       </TransactionCell>
       {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}
