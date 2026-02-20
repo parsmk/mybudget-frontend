@@ -4,8 +4,8 @@ import { Button } from "./ui-kit/Button";
 import * as XLSX from "xlsx";
 import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/app/_route-map";
+import { Dropdown } from "./ui-kit/Dropdown";
+import { DATE_FORMATS, DateFormat, parseToISODate } from "@/utils/dateParser";
 
 type FileIOModalProps = {
   open: boolean;
@@ -14,14 +14,13 @@ type FileIOModalProps = {
 };
 
 export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
-  const router = useRouter();
-
   const { mutateAsync: createTransactions } = useCreateTransaction();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [sheetData, setSheetData] = useState<string[][]>([]);
   const [firstDataRow, setFirstDataRow] = useState<number>(-1);
-  const [colAnnotations, setColAnnotations] = useState<Record<string, number>>(
+  const [dateFormat, setDateFormat] = useState<DateFormat>("YYYY-MM-DD");
+  const [colAnnotations, setColAnnotations] = useState<Record<number, string>>(
     {},
   );
 
@@ -45,22 +44,25 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
       return;
     }
 
+    const annotations: Record<string, number> = {};
+    for (const [col, annotation] of Object.entries(colAnnotations)) {
+      annotations[annotation] = Number(col);
+    }
+
     const transactions: CreateTransactionRequest[] = [];
     for (let i = firstDataRow; i < sheetData.length; i++) {
       const row = sheetData[i];
-      console.log(row[colAnnotations["date"]]);
       transactions.push({
-        date: row[colAnnotations["date"]],
-        payee: row[colAnnotations["payee"]],
-        inflow: Number(row[colAnnotations["inflow"]]),
-        outflow: Number(row[colAnnotations["outflow"]]),
+        date: parseToISODate(row[annotations["date"]], dateFormat),
+        payee: row[annotations["payee"]],
+        inflow: Number(row[annotations["inflow"]]),
+        outflow: Number(row[annotations["outflow"]]),
         accountID: accountID,
       });
     }
 
     try {
       await createTransactions({ data: transactions, accountID });
-      router.push(ROUTES.PORTAL.ACCOUNT(accountID));
       close();
     } catch (error) {
       setErrs((prev) => [...prev, String(error)]);
@@ -104,31 +106,39 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
                   {sheetData.length > 0 &&
                     sheetData.at(sheetData.length - 1)?.map((_, i) => (
                       <td key={i}>
-                        <select
-                          className="w-full"
+                        <Dropdown
+                          options={["date", "payee", "inflow", "outflow"]}
+                          defaultOption="--select--"
+                          value={colAnnotations[i]}
                           onChange={(e) => {
                             const value = e.currentTarget.value;
                             if (!value) return;
                             setColAnnotations((prev) => ({
                               ...prev,
-                              [value]: i,
+                              [i]: value,
                             }));
                           }}
-                        >
-                          <option>--select--</option>
-                          <option>date</option>
-                          <option>payee</option>
-                          <option>inflow</option>
-                          <option>outflow</option>
-                          <option>balance</option>
-                        </select>
+                        />
                       </td>
                     ))}
                 </tr>
               </tfoot>
             </table>
           </div>
-          <p>Use these dropdowns to select what each column represents</p>{" "}
+          <p>Use these dropdowns to select what each column represents</p>
+          <div className="flex gap-x-2 my-2">
+            <span>Date Format: </span>
+            <div className="grow">
+              <Dropdown
+                variant="default"
+                value={dateFormat}
+                options={DATE_FORMATS.map((d) => d)}
+                onChange={(e) =>
+                  setDateFormat(e.currentTarget.value as DateFormat)
+                }
+              />
+            </div>
+          </div>
           <div className="flex items-center mt-3">
             <div className="grow flex flex-wrap mx-2">
               {errs.map((err, i) => (
