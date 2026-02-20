@@ -2,10 +2,20 @@
 
 import { Transaction } from "@/api/transaction";
 import { TransactionRow } from "./TransactionRow";
-import { TransactionCell } from "./TransactionCell";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { useDeleteTransactions } from "@/hooks/transactions/useDeleteTransactions";
+import { SortState, TransactionHeader } from "./TransactionHeader";
+
+export const TRANSACTION_HEADINGS = [
+  "Date",
+  "Payee",
+  "Category",
+  "Inflow",
+  "Outflow",
+  "Account",
+] as const;
+export type TransactionHeadings = (typeof TRANSACTION_HEADINGS)[number];
 
 export const TransactionTable = ({
   transactions,
@@ -18,6 +28,46 @@ export const TransactionTable = ({
     useDeleteTransactions();
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [orderBy, setOrderBy] = useState<
+    [h: TransactionHeadings, state: SortState]
+  >(["Date", "desc"]);
+
+  const orderedTransactions = useMemo(() => {
+    const [heading, state] = orderBy;
+    if (state === "none") return transactions;
+    if (transactions.length < 2) return transactions;
+
+    const dir = state === "asc" ? 1 : -1;
+
+    const sorted = [...transactions].sort((a, b) => {
+      switch (heading) {
+        case "Date":
+          return dir * a.date.localeCompare(b.date);
+        case "Payee":
+          return (
+            dir *
+            a.payee.localeCompare(b.payee, undefined, { sensitivity: "base" })
+          );
+        case "Category":
+          return (
+            dir *
+            String(a.category ?? "").localeCompare(
+              String(b.category ?? ""),
+              undefined,
+              { sensitivity: "base" },
+            )
+          );
+        case "Inflow":
+          return dir * (Number(a.inflow ?? 0) - Number(b.inflow ?? 0));
+        case "Outflow":
+          return dir * (Number(a.outflow ?? 0) - Number(b.outflow ?? 0));
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [orderBy, transactions]);
 
   const toggle = (id: string) => {
     setSelected((prev) => {
@@ -39,9 +89,9 @@ export const TransactionTable = ({
 
   return (
     <table className="w-full text-justify">
-      <thead className="sticky border-b border-foreground/75 bg-primary/75 top-0">
+      <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0">
         <tr>
-          <TransactionCell isHeader>
+          <th>
             <input
               className="mx-auto w-full h-full"
               type="checkbox"
@@ -54,35 +104,41 @@ export const TransactionTable = ({
                 else setSelected(new Set(transactions.map((t) => t.id)));
               }}
             />
-          </TransactionCell>
-          <TransactionCell isHeader>Date</TransactionCell>
-          <TransactionCell isHeader>Payee</TransactionCell>
-          <TransactionCell isHeader>Category</TransactionCell>
-          <TransactionCell isHeader>Inflow</TransactionCell>
-          <TransactionCell isHeader>Outflow</TransactionCell>
-          {showAccount ? (
-            <TransactionCell isHeader>Account</TransactionCell>
-          ) : null}
-          <th>
-            {selected.size > 0 && (
-              <div className="w-fit mx-auto">
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete()}
-                  disabled={deleting}
+          </th>
+          {TRANSACTION_HEADINGS.map((h, i) => {
+            const state = orderBy[0] === h ? orderBy[1] : "none";
+            if (!showAccount && h === "Account") return;
+            else
+              return (
+                <TransactionHeader
+                  key={i}
+                  isFilter
+                  sortState={state}
+                  setSortState={(s) => setOrderBy([h, s])}
                 >
-                  Delete
-                </Button>
-              </div>
+                  {h}
+                </TransactionHeader>
+              );
+          })}
+          <th className="px-2">
+            {selected.size > 0 && (
+              <Button
+                type="button"
+                variant="danger"
+                size="sm"
+                onClick={() => handleDelete()}
+                disabled={deleting}
+                fullWidth
+              >
+                Delete
+              </Button>
             )}
           </th>
         </tr>
       </thead>
       <tbody>
-        {transactions &&
-          transactions.map((t) => (
+        {orderedTransactions &&
+          orderedTransactions.map((t) => (
             <TransactionRow
               selected={selected.has(t.id)}
               setSelected={(id) => toggle(id)}

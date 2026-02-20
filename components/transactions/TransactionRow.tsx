@@ -1,6 +1,6 @@
 import { CategoryDropdown } from "../CategoryDropdown";
 import { Transaction } from "@/api/transaction";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Category } from "@/api/category";
 import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
@@ -142,6 +142,7 @@ export const TransactionRow = ({
             size="sm"
             disabled={!hasChanged || editing}
             onClick={async () => await handleSubmit()}
+            fullWidth
           >
             Save
           </Button>
@@ -150,6 +151,7 @@ export const TransactionRow = ({
             size="sm"
             variant="danger"
             onClick={() => deleteTransaction(transaction.id)}
+            fullWidth
           >
             Delete
           </Button>
