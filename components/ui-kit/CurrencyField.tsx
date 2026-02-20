@@ -27,8 +27,6 @@ export const CurrencyField = ({
     _setValue(value == null ? "" : value.toFixed(2));
   }, [value]);
 
-  //   console.log(`Local value: ${_value} | Parent value: ${value}`);
-
   return (
     <InputField
       name={name}
