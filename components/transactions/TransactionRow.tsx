@@ -1,14 +1,18 @@
-import { CategoryDropdown } from "../CategoryDropdown";
+import { useEffect, useMemo, useState } from "react";
+
 import { Transaction } from "@/api/transaction";
-import { useMemo, useState } from "react";
 import { Category } from "@/api/category";
-import { InputField } from "../ui-kit/InputField";
-import { Button } from "../ui-kit/Button";
+
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
 import { useAccount } from "@/hooks/accounts/useAccount";
-import { TransactionCell } from "./TransactionCell";
+
+import { InputField } from "../ui-kit/InputField";
+import { Button } from "../ui-kit/Button";
 import { CurrencyField } from "../ui-kit/CurrencyField";
+
+import { CategoryDropdown } from "../CategoryDropdown";
+import { TransactionCell } from "./TransactionCell";
 
 export const TransactionRow = ({
   transaction,
@@ -34,6 +38,14 @@ export const TransactionRow = ({
     transaction.outflow,
   );
 
+  useEffect(() => {
+    setCat(transaction.category ?? null);
+    setDate(transaction.date);
+    setPayee(transaction.payee);
+    setInflow(transaction.inflow);
+    setOutflow(transaction.outflow);
+  }, [transaction]);
+
   const hasChanged = useMemo(() => {
     if (cat?.id !== transaction.category?.id) return true;
     if (date !== transaction.date) return true;
@@ -42,7 +54,7 @@ export const TransactionRow = ({
     if (outflow !== transaction.outflow) return true;
 
     return false;
-  }, [cat, date, payee, inflow, outflow]);
+  }, [cat, date, payee, inflow, outflow, transaction]);
 
   const handleSubmit = async () => {
     try {
