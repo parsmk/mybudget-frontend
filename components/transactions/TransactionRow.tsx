@@ -27,7 +27,7 @@ export const TransactionRow = ({
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
   const [cat, setCat] = useState<Category | undefined>(transaction.category);
-  const [date, setDate] = useState<string>(transaction.date.slice(0, 10));
+  const [date, setDate] = useState<string>(transaction.date);
   const [payee, setPayee] = useState<string>(transaction.payee);
   const [inflow, setInflow] = useState<number | undefined>(transaction.inflow);
   const [outflow, setOutflow] = useState<number | undefined>(
@@ -35,8 +35,8 @@ export const TransactionRow = ({
   );
 
   const hasChanged = useMemo(() => {
-    if (cat && cat.id !== transaction.category?.id) return true;
-    if (date !== transaction.date.slice(0, 10)) return true;
+    if (cat?.id !== transaction.category?.id) return true;
+    if (date !== transaction.date) return true;
     if (payee !== transaction.payee) return true;
     if (inflow !== transaction.inflow) return true;
     if (outflow !== transaction.outflow) return true;
@@ -55,9 +55,6 @@ export const TransactionRow = ({
         outflow: outflow === transaction.outflow ? undefined : outflow,
       };
 
-      console.log(patch.inflow);
-      console.log(patch.outflow);
-
       const cleanedPatch = Object.fromEntries(
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as typeof patch;
@@ -70,7 +67,7 @@ export const TransactionRow = ({
       });
 
       setCat(updated.category ?? cat);
-      setDate(updated.date.slice(0, 10));
+      setDate(updated.date);
       setPayee(updated.payee);
       setInflow(updated.inflow);
       setOutflow(updated.outflow);
