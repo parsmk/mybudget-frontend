@@ -18,10 +18,10 @@ export type EditTransactionRequest = {
   id: string;
   date?: string;
   payee?: string;
-  categoryID?: string;
+  categoryID?: string | null;
   accountID?: string;
-  inflow?: number;
-  outflow?: number;
+  inflow?: number | null;
+  outflow?: number | null;
 };
 
 export type Transaction = {

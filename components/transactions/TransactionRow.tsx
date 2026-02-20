@@ -26,7 +26,7 @@ export const TransactionRow = ({
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
-  const [cat, setCat] = useState<Category | undefined>(transaction.category);
+  const [cat, setCat] = useState<Category | null>(transaction.category ?? null);
   const [date, setDate] = useState<string>(transaction.date);
   const [payee, setPayee] = useState<string>(transaction.payee);
   const [inflow, setInflow] = useState<number | undefined>(transaction.inflow);
@@ -48,7 +48,8 @@ export const TransactionRow = ({
     try {
       const patch = {
         id: transaction.id,
-        categoryID: cat?.id === transaction.category?.id ? undefined : cat?.id,
+        categoryID:
+          cat?.id === transaction.category?.id ? undefined : (cat?.id ?? null),
         date: date === transaction.date ? undefined : date,
         payee: payee === transaction.payee ? undefined : payee,
         inflow: inflow === transaction.inflow ? undefined : inflow,
@@ -59,14 +60,12 @@ export const TransactionRow = ({
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as typeof patch;
 
-      console.log(cleanedPatch);
-
       const updated = await editTransaction({
         patch: cleanedPatch,
         oldAccountID: transaction.accountID,
       });
 
-      setCat(updated.category ?? cat);
+      setCat(updated.category ?? null);
       setDate(updated.date);
       setPayee(updated.payee);
       setInflow(updated.inflow);

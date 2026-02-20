@@ -4,8 +4,8 @@ import { Category } from "@/api/category";
 import React, { Dispatch, SetStateAction } from "react";
 
 type CategoryDropdownProps = {
-  value?: Category;
-  setValue: Dispatch<SetStateAction<Category | undefined>>;
+  value: Category | null;
+  setValue: Dispatch<SetStateAction<Category | null>>;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
@@ -19,11 +19,17 @@ export const CategoryDropdown = ({
   return (
     <Dropdown
       value={value}
-      labelFn={(c) => c.name}
-      idFn={(c) => c.id}
+      labelFn={(c) => {
+        if (c) return c.name;
+        else return "none";
+      }}
+      idFn={(c) => {
+        if (c) return c.id;
+        else return "none";
+      }}
       onChange={(e) => {
         const val = categories?.find((c) => c.id === e.currentTarget.value);
-        setValue(val ?? undefined);
+        setValue(val ?? null);
         onChange?.(e);
       }}
       options={categories ?? []}
