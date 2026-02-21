@@ -89,7 +89,7 @@ export const TransactionTable = ({
 
   return (
     <table className="w-full text-justify">
-      <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0">
+      <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0 z-10">
         <tr>
           <th>
             <input
