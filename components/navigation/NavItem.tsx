@@ -9,7 +9,7 @@ type NavItemProps = {
 export const NavItem = ({ label, onClick, classNames }: NavItemProps) => {
   return (
     <div
-      className={`transition p-2 cursor-pointer ${classNames}`}
+      className={`transition p-2 cursor-pointer text-white ${classNames}`}
       onClick={(e) => {
         e.preventDefault();
         onClick?.(e);

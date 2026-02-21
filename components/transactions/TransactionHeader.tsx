@@ -35,7 +35,7 @@ export const TransactionHeader = ({
       className={`p-2 ${isFilter ? "cursor-pointer" : ""}`}
       onClick={() => changeFilter()}
     >
-      <div className="w-full h-full flex">
+      <div className="w-full h-full text-white flex">
         <div className="grow">{children}</div>
         {isFilter ? chevron : null}
       </div>

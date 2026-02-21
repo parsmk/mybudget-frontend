@@ -31,7 +31,7 @@ export const Button = ({
     secondary:
       "bg-secondary/80 outline-tertiary/80 hover:outline-tertiary hover:bg-secondary text-white",
     danger:
-      "bg-danger/70 outline-danger/80 hover:outline-danger hover:bg-danger/90",
+      "bg-danger/70 outline-danger/80 hover:outline-danger hover:bg-danger/90 text-white",
     outline:
       "bg-background text-foreground/80 outline-foreground/80 hover:text-foreground hover:outline-foreground",
   };
