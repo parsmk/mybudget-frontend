@@ -50,7 +50,7 @@ const HomePage = () => {
             {visibleComp === "login" ? (
               <LoginForm />
             ) : visibleComp === "signup" ? (
-              <SignupForm />
+              <SignupForm onDone={() => setVisibleComp("btns")} />
             ) : null}
           </div>
         </div>

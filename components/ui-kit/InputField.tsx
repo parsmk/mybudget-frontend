@@ -58,7 +58,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     const adornmentClasses = `${value ? "opacity-100" : "opacity-50"}`;
 
     return (
-      <div>
+      <div className="w-full">
         {label && (
           <label className="block my-1" htmlFor={name}>
             {label}
