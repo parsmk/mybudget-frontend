@@ -25,19 +25,24 @@ export const LoginForm = () => {
       });
 
       router.push(ROUTES.PORTAL.DASHBOARD);
-    } catch (errs) {
-      setErrs((prev) => [...prev, errs as string]);
-    }
+    } catch (errs) {}
   };
 
   return (
     <form onSubmit={handleSubmit} className="h-full w-full">
       <AuthFormCard>
         <h2 className="text-2xl text-center">Login</h2>
+        {errs.length > 0 &&
+          errs.map((e, i) => (
+            <p key={i} className="text-danger">
+              {e}
+            </p>
+          ))}
         <InputField
           type="text"
           name="email"
           label="Email"
+          required
           placeholder="example@gmail.com..."
           onChange={(e) => setEmail(e.currentTarget.value)}
         />
@@ -45,6 +50,7 @@ export const LoginForm = () => {
           type="password"
           name="password"
           label="Password"
+          required
           onChange={(e) => setPassword(e.currentTarget.value)}
         />
         <Button type="submit" size="md" variant="primary">

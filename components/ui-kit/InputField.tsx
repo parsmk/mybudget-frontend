@@ -15,6 +15,7 @@ type InputFieldProps = {
   value?: string | number;
   variant?: InputFieldVariants;
   defaultValue?: string;
+  required?: boolean;
   leftAdornment?: React.ReactNode;
   rightAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -34,6 +35,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       value,
       defaultValue,
       variant = "default",
+      required = false,
       leftAdornment,
       rightAdornment,
       onChange,
@@ -61,7 +63,8 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       <div className="w-full">
         {label && (
           <label className="block my-1" htmlFor={name}>
-            {label}
+            <span>{label}</span>
+            {required ? <span className="text-danger ml-1">*</span> : null}
           </label>
         )}
         <div
@@ -78,6 +81,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             value={value}
             defaultValue={defaultValue}
             placeholder={placeholder ?? `${label}...`}
+            required={required}
             onChange={onChange}
             onKeyDown={onKeyDown}
             onBlur={onBlur}
