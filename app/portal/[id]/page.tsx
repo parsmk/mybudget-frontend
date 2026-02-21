@@ -11,18 +11,16 @@ import { useAccountTransactions } from "@/hooks/transactions/useAccountTransacti
 import { use, useState } from "react";
 
 const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = use(params);
-  const { data: account } = useAccount(id);
-  const { data: transactions } = useAccountTransactions(id);
-  const { data: analytics } = useAccountAnalytics(id);
-
   const [open, setOpen] = useState<boolean>(false);
   const [to, setTo] = useState<Date>(new Date());
-  const [from, setFrom] = useState<Date>(() => {
-    const curr = new Date();
-    curr.setMonth(curr.getMonth() - 1);
-    return curr;
-  });
+  const [from, setFrom] = useState<Date>(
+    () => new Date(new Date().getFullYear(), 0, 1),
+  );
+
+  const { id } = use(params);
+  const { data: account } = useAccount(id);
+  const { data: transactions } = useAccountTransactions(id, { from, to });
+  const { data: analytics } = useAccountAnalytics(id);
 
   const chartData = analytics?.map((a) => ({
     ...a,
@@ -45,8 +43,20 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <InputField name="from" label="From" type="date" />
-              <InputField name="to" label="To" type="date" />
+              <InputField
+                value={from.toISOString().slice(0, 10)}
+                onChange={(e) => setFrom(new Date(e.currentTarget.value))}
+                name="from"
+                label="From"
+                type="date"
+              />
+              <InputField
+                value={to.toISOString().slice(0, 10)}
+                onChange={(e) => setTo(new Date(e.currentTarget.value))}
+                name="to"
+                label="To"
+                type="date"
+              />
             </div>
           </div>
         </div>

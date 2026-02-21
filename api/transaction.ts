@@ -33,3 +33,8 @@ export type Transaction = {
   inflow?: number;
   outflow?: number;
 };
+
+export type TransactionFilters = {
+  from?: string;
+  to?: string;
+};

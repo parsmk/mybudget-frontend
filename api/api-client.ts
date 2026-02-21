@@ -9,6 +9,7 @@ import {
   CreateTransactionResponse,
   EditTransactionRequest,
   Transaction,
+  TransactionFilters,
 } from "./transaction";
 import { LoginRequest, SignupRequest } from "./user";
 
@@ -73,10 +74,14 @@ export class APIClient {
     return this.request<Account>(`account/${id}`, { method: "GET" });
   }
 
-  public async getAccountTransactions(id: string) {
-    return this.request<Transaction[]>(`account/${id}/transactions`, {
-      method: "GET",
-    });
+  public async getAccountTransactions(id: string, params?: TransactionFilters) {
+    const _params = params ? new URLSearchParams(params) : "";
+    return this.request<Transaction[]>(
+      `account/${id}/transactions?${_params}`,
+      {
+        method: "GET",
+      },
+    );
   }
 
   public async getAccountAnalytics(id: string) {
@@ -105,8 +110,11 @@ export class APIClient {
     });
   }
 
-  public async getTransactions() {
-    return this.request<Transaction[]>("transaction/", { method: "GET" });
+  public async getTransactions(params?: TransactionFilters) {
+    const _params = params ? new URLSearchParams(params) : "";
+    return this.request<Transaction[]>(`transaction?${_params}`, {
+      method: "GET",
+    });
   }
 
   public async editTransaction(data: EditTransactionRequest) {
