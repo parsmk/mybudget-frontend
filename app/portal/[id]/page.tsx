@@ -63,9 +63,10 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="px-5">
           <h2 className="text-2xl font-bold">{account?.name}</h2>
           <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
+          <h3 className="text-xl">{account?.type}</h3>
         </div>
         <div className="px-5 flex grow items-center justify-center">
-          {chartData && (
+          {chartData && chartData?.length > 0 && (
             <BarChart
               data={chartData}
               labelFn={(dp) =>
