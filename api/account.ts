@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export enum AccountType {
   CHEQUING = "chequing",
   CREDIT = "credit",
@@ -17,7 +19,7 @@ export type CreateAccountRequest = {
 };
 
 export type AccountAnalyticsResponse = {
-  categoryID: string;
+  category: Category;
   amount: number;
   pct: number;
 };
