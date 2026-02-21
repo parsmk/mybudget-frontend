@@ -31,7 +31,7 @@ export const BarChart = <T,>({
         {data.map((d, i) => (
           <div
             key={i}
-            className="h-full"
+            className="h-full first:border-none last:border-none border-x-2 border-foreground"
             style={{
               width: `${shareFn(d).toFixed()}%`,
               backgroundColor: fillFn(d),
