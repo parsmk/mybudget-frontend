@@ -66,7 +66,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         )}
         <div
           className={`${stateClasses[state]} ${variantClasses[variant]}
-            border-1 p-2 rounded-md w-full flex gap-0.5
+            border-1 p-2 rounded-md w-full flex gap-0.5 dark:[color-scheme:dark]
             transition focus-within:border-foreground/50 focus-within:text-foreground hover:text-foreground
           `}
         >
