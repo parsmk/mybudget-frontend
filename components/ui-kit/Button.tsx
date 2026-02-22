@@ -31,7 +31,7 @@ export const Button = ({
     primary: "bg-primary/80 outline-tertiary/80 text-white",
     secondary: "bg-secondary/80 outline-tertiary/80 text-white",
     danger: "bg-danger/70 outline-danger/80 text-white",
-    outline: "bg-background text-foreground/80",
+    outline: "text-foreground/80",
   };
 
   const variantInteractivity: Record<ButtonVariants, string> = {
