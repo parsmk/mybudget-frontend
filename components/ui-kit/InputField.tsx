@@ -16,6 +16,7 @@ type InputFieldProps = {
   variant?: InputFieldVariants;
   defaultValue?: string;
   required?: boolean;
+  disabled?: boolean;
   leftAdornment?: React.ReactNode;
   rightAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -36,6 +37,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       defaultValue,
       variant = "default",
       required = false,
+      disabled = false,
       leftAdornment,
       rightAdornment,
       onChange,
@@ -81,6 +83,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             value={value}
             defaultValue={defaultValue}
             placeholder={placeholder ?? `${label}...`}
+            disabled={disabled}
             required={required}
             onChange={onChange}
             onKeyDown={onKeyDown}

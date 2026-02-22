@@ -11,6 +11,7 @@ type ButtonProps = {
   variant?: ButtonVariants;
   size?: ButtonSizes;
   children?: React.ReactNode;
+  loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
   onClick?: () => void;
@@ -21,24 +22,28 @@ export const Button = ({
   variant = "primary",
   size = "md",
   children,
+  loading = false,
   disabled = false,
   fullWidth = false,
   onClick,
 }: ButtonProps) => {
   const variantClasses: Record<ButtonVariants, string> = {
-    primary:
-      "bg-primary/80 outline-tertiary/80 hover:outline-tertiary hover:bg-primary text-white",
-    secondary:
-      "bg-secondary/80 outline-tertiary/80 hover:outline-tertiary hover:bg-secondary text-white",
-    danger:
-      "bg-danger/70 outline-danger/80 hover:outline-danger hover:bg-danger/90 text-white",
-    outline:
-      "bg-background text-foreground/80 outline-foreground/80 hover:text-foreground hover:outline-foreground",
+    primary: "bg-primary/80 outline-tertiary/80 text-white",
+    secondary: "bg-secondary/80 outline-tertiary/80 text-white",
+    danger: "bg-danger/70 outline-danger/80 text-white",
+    outline: "bg-background text-foreground/80",
   };
 
-  const disabledClass = disabled
-    ? "opacity-50 cursor-not-allowed"
-    : "cursor-pointer";
+  const variantInteractivity: Record<ButtonVariants, string> = {
+    primary: "hover:outline-tertiary hover:bg-primary",
+    secondary: "hover:outline-tertiary hover:bg-secondary",
+    danger: "hover:outline-danger hover:bg-danger/90",
+    outline: "hover:text-foreground hover:outline-foreground",
+  };
+
+  const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : null;
+
+  const loadingClass = loading ? "opacity-50 cursor-wait" : null;
 
   const sizeClasses: Record<ButtonSizes, string> = {
     sm: `${fullWidth ? "w-full" : "w-[5rem]"} h-[2rem]`,
@@ -49,7 +54,9 @@ export const Button = ({
   return (
     <button
       disabled={disabled}
-      className={`block rounded-md text-center font-semibold outline outline-1.5 transition ${disabledClass} ${variantClasses[variant]} ${sizeClasses[size]}`}
+      className={`block rounded-md text-center font-semibold outline outline-1.5 transition 
+        ${disabledClass ?? ""} ${loadingClass ?? ""} ${variantClasses[variant]} ${!disabled || !loading ? `${variantInteractivity[variant]} cursor-pointer` : ""} ${sizeClasses[size]}
+      `}
       type={type}
       onClick={() => onClick?.()}
     >
