@@ -3,8 +3,8 @@ import { Category } from "./category";
 export type CreateTransactionRequest = {
   date: string;
   payee: string;
-  categoryID?: string;
-  accountID: string;
+  category_id?: string;
+  account_id: string;
   inflow?: number;
   outflow?: number;
 };
@@ -13,8 +13,8 @@ export type EditTransactionRequest = {
   id: string;
   date?: string;
   payee?: string;
-  categoryID?: string | null;
-  accountID?: string;
+  category_id?: string | null;
+  account_id?: string;
   inflow?: number | null;
   outflow?: number | null;
 };
@@ -24,7 +24,7 @@ export type Transaction = {
   date: string;
   payee: string;
   category?: Category;
-  accountID: string;
+  account_id: string;
   inflow?: number;
   outflow?: number;
 };

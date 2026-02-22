@@ -15,7 +15,6 @@ export const BarChart = <T,>({
   labelFn,
   shareFn,
 }: BarChartProps<T>) => {
-  console.log(data);
   return (
     <div className="flex h-full w-full items-center p-5">
       <div className="grid grid-cols-[auto_1fr_1fr] items-center gap-2">

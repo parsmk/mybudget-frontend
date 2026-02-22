@@ -6,6 +6,7 @@ import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
 import { Dropdown } from "./ui-kit/Dropdown";
 import { DATE_FORMATS, DateFormat, parseToISODate } from "@/utils/dateParser";
+import { useErrorHandler } from "@/hooks/useErrorState";
 
 type FileIOModalProps = {
   open: boolean;
@@ -24,7 +25,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     {},
   );
 
-  const [errs, setErrs] = useState<string[]>([]);
+  const { fieldErrors, formErrors, handler } = useErrorHandler();
 
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
@@ -35,12 +36,9 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
   };
 
   const prepareAndPostData = async () => {
-    setErrs([]);
+    handler.clear();
     if (firstDataRow < 0 || Object.keys(colAnnotations).length < 1) {
-      setErrs((prev) => [
-        ...prev,
-        "Must set first data row and annotate columns!",
-      ]);
+      handler.addError("Must set first data row and annotate columns!");
       return;
     }
 
@@ -57,7 +55,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
         payee: row[annotations["payee"]],
         inflow: Number(row[annotations["inflow"]]),
         outflow: Number(row[annotations["outflow"]]),
-        accountID: accountID,
+        account_id: accountID,
       });
     }
 
@@ -65,7 +63,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
       await createTransactions({ data: transactions, accountID });
       close();
     } catch (error) {
-      setErrs((prev) => [...prev, String(error)]);
+      handler.handle(error);
     }
   };
 
@@ -141,7 +139,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
           </div>
           <div className="flex items-center mt-3">
             <div className="grow flex flex-wrap mx-2">
-              {errs.map((err, i) => (
+              {formErrors.map((err, i) => (
                 <p className="text-danger" key={i}>
                   {err}
                 </p>

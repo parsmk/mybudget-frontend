@@ -12,7 +12,7 @@ export const useDeleteTransaction = () => {
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({
-        queryKey: ["accounts", data.accountID],
+        queryKey: ["accounts", data.account_id],
       });
     },
   });

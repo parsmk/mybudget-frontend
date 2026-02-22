@@ -25,7 +25,7 @@ export const TransactionRow = ({
   setSelected: (id: string) => void;
   showAccount?: boolean;
 }) => {
-  const { data: account } = useAccount(transaction.accountID);
+  const { data: account } = useAccount(transaction.account_id);
   const { mutateAsync: editTransaction, isPending: editing } =
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
@@ -74,7 +74,7 @@ export const TransactionRow = ({
 
       const updated = await editTransaction({
         patch: cleanedPatch,
-        oldAccountID: transaction.accountID,
+        oldAccountID: transaction.account_id,
       });
 
       setCat(updated.category ?? null);
