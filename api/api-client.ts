@@ -6,11 +6,11 @@ import {
 import { Category, CreateCategoryRequest } from "./category";
 import {
   CreateTransactionRequest,
-  CreateTransactionResponse,
   EditTransactionRequest,
   Transaction,
   TransactionFilters,
 } from "./transaction";
+import { CreateObjectResponse } from "./universals";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
@@ -60,7 +60,7 @@ export class APIClient {
 
   // CATEGORIES
   public async createAccount(data: CreateAccountRequest) {
-    return this.request<Account>("account/", {
+    return this.request<CreateObjectResponse<Account>>("account/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -104,7 +104,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<CreateTransactionResponse>("transaction/", {
+    return this.request<CreateObjectResponse<Transaction>>("transaction/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -138,7 +138,7 @@ export class APIClient {
 
   // CATEGORIES
   public async createCategory(data: CreateCategoryRequest) {
-    return this.request<Category>("category/", {
+    return this.request<CreateObjectResponse<Category>>("category/", {
       method: "POST",
       body: JSON.stringify(data),
     });

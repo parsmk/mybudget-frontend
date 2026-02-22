@@ -9,11 +9,6 @@ export type CreateTransactionRequest = {
   outflow?: number;
 };
 
-export type CreateTransactionResponse = {
-  errors: { count: number; reasons: string[] };
-  success: { count: number; uploaded: Transaction[] };
-};
-
 export type EditTransactionRequest = {
   id: string;
   date?: string;
