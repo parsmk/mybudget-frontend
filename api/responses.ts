@@ -4,7 +4,6 @@ export type CreateObjectResponse<T> = {
 };
 
 export type ErrorResponse = {
-  error?: string;
   formErrors?: string[];
-  fieldErrors?: object[];
+  fieldErrors?: Record<string, string[] | undefined>;
 };

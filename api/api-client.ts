@@ -10,16 +10,18 @@ import {
   Transaction,
   TransactionFilters,
 } from "./transaction";
-import { CreateObjectResponse } from "./universals";
+import { CreateObjectResponse, ErrorResponse } from "./responses";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
   public readonly status: number;
+  public readonly response: ErrorResponse;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, response: ErrorResponse) {
     super(message);
     this.name = "APIClientError";
     this.status = status;
+    this.response = response;
   }
 }
 
@@ -185,9 +187,8 @@ export class APIClient {
         headers,
       });
     } catch (error) {
-      throw new APIClientError(
+      throw new Error(
         error instanceof Error ? error.message : "Network request failed",
-        0,
       );
     }
 
@@ -197,10 +198,10 @@ export class APIClient {
     }
 
     if (!response.ok) {
-      const text = await response.text();
       throw new APIClientError(
-        text || response.statusText || "Request failed",
+        response.statusText || "Request failed",
         response.status,
+        (await response.json()) as ErrorResponse,
       );
     }
 
