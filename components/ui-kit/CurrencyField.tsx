@@ -21,7 +21,7 @@ export const CurrencyField = ({
   name,
   value,
   variant,
-  state = "default",
+  state,
   errors,
   setValue,
 }: CurrencyFieldProps) => {
