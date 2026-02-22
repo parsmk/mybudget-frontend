@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/_route-map";
 import { AuthFormCard } from "./AuthFormCard";
 import { useErrorHandler } from "@/hooks/useErrorState";
-import { testEmailString } from "@/utils/emailReg";
+import { isValidEmail } from "@/utils/authValidation";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,7 +19,7 @@ export const LoginForm = () => {
   const router = useRouter();
 
   const valid = useMemo(() => {
-    if (email.trim().length > 1 && !testEmailString(email)) return false;
+    if (email.trim().length > 1 && !isValidEmail(email)) return false;
     if (password.trim().length < 6) return false;
 
     return true;
