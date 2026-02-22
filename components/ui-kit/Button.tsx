@@ -55,7 +55,7 @@ export const Button = ({
     <button
       disabled={disabled}
       className={`block rounded-md text-center font-semibold outline outline-1.5 transition 
-        ${disabledClass ?? ""} ${loadingClass ?? ""} ${variantClasses[variant]} ${!disabled || !loading ? `${variantInteractivity[variant]} cursor-pointer` : ""} ${sizeClasses[size]}
+        ${disabledClass ?? ""} ${loadingClass ?? ""} ${variantClasses[variant]} ${!disabled && !loading ? `${variantInteractivity[variant]} cursor-pointer` : ""} ${sizeClasses[size]}
       `}
       type={type}
       onClick={() => onClick?.()}
