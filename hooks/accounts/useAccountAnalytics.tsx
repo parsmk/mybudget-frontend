@@ -15,6 +15,6 @@ export const useAccountAnalytics = (
     queryFn: () => {
       return apiClient.getAccountAnalytics(id, { from, to });
     },
-    queryKey: ["accounts", id, "analytics"],
+    queryKey: ["accounts", id, "analytics", from, to],
   });
 };
