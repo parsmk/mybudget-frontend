@@ -1,10 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { InputField, InputFieldVariants } from "./InputField";
+import { InputField, InputFieldStates, InputFieldVariants } from "./InputField";
 
 type CurrencyFieldProps = {
   name: string;
   value?: number;
   variant?: InputFieldVariants;
+  state?: InputFieldStates;
+  errors?: string[];
   setValue?: Dispatch<SetStateAction<number | undefined>>;
 };
 
@@ -19,6 +21,8 @@ export const CurrencyField = ({
   name,
   value,
   variant,
+  state = "default",
+  errors,
   setValue,
 }: CurrencyFieldProps) => {
   const [_value, _setValue] = useState<string>(String(value?.toFixed(2) ?? ""));
@@ -32,7 +36,9 @@ export const CurrencyField = ({
       name={name}
       type="text"
       value={_value}
+      state={state}
       variant={variant}
+      errors={errors}
       placeholder={(0).toFixed(2)}
       onChange={(e) => _setValue(e.currentTarget.value)}
       onBlur={() => {
