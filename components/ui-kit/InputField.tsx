@@ -17,6 +17,7 @@ type InputFieldProps = {
   defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
+  errors?: string[];
   leftAdornment?: React.ReactNode;
   rightAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -38,6 +39,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       variant = "default",
       required = false,
       disabled = false,
+      errors,
       leftAdornment,
       rightAdornment,
       onChange,
@@ -93,6 +95,13 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           />
           {<div className={adornmentClasses}>{rightAdornment}</div>}
         </div>
+        {errors &&
+          errors.length > 0 &&
+          errors.map((err, i) => (
+            <p key={i} className="text-danger">
+              {err}
+            </p>
+          ))}
       </div>
     );
   },
