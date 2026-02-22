@@ -77,19 +77,21 @@ export class APIClient {
   }
 
   public async getAccountTransactions(id: string, params?: TransactionFilters) {
-    const _params = params ? new URLSearchParams(params) : "";
     return this.request<Transaction[]>(
-      `account/${id}/transactions?${_params}`,
-      {
-        method: "GET",
-      },
+      `account/${id}/transactions`,
+      { method: "GET" },
+      false,
+      params ? Object.entries(params) : undefined,
     );
   }
 
-  public async getAccountAnalytics(id: string) {
-    return this.request<AccountAnalyticsResponse[]>(`account/${id}/analytics`, {
-      method: "GET",
-    });
+  public async getAccountAnalytics(id: string, params?: TransactionFilters) {
+    return this.request<AccountAnalyticsResponse[]>(
+      `account/${id}/analytics`,
+      { method: "GET" },
+      false,
+      params ? Object.entries(params) : undefined,
+    );
   }
 
   public async editAccount(data: Account) {
@@ -162,12 +164,30 @@ export class APIClient {
   }
   // ENDOF CATEGORIES
 
+  private addParams(params?: [key: string, val: string][]) {
+    if (!params) return "";
+    const isPresent = (v: unknown) => {
+      if (typeof v !== "string") return false;
+      const t = v.trim();
+      return t !== "" && t !== "undefined" && t !== "null";
+    };
+
+    const output = new URLSearchParams();
+    for (const [key, val] of params) {
+      if (!isPresent(key) || !isPresent(val)) continue;
+      output.set(key, val);
+    }
+
+    return `?${output}`;
+  }
+
   private async request<T>(
     path: string,
     init: RequestInit = {},
     refresh = true,
+    params?: [key: string, val: string][],
   ): Promise<T> {
-    const url = `${this.baseURL}/${path}`;
+    const url = `${this.baseURL}/${path}${this.addParams(params)}`;
     const headers = new Headers(init.headers ?? {});
     init.credentials = "include";
 
