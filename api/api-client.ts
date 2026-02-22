@@ -206,7 +206,8 @@ export class APIClient {
 
     if (
       response.status === 204 ||
-      response.headers.get("content-length") === "0"
+      response.status === 205 ||
+      !response.headers.get("content-type")?.includes("application/json")
     ) {
       return undefined as T;
     }
