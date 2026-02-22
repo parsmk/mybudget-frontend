@@ -20,7 +20,7 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const { data: account } = useAccount(id);
   const { data: transactions } = useAccountTransactions(id, { from, to });
-  const { data: analytics } = useAccountAnalytics(id);
+  const { data: analytics } = useAccountAnalytics(id, { from, to });
 
   const chartData = analytics?.map((a) => ({
     ...a,
