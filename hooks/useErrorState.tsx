@@ -22,6 +22,12 @@ export const useErrorHandler = () => {
     [],
   );
 
+  const addErrors = useCallback(
+    (m: string[]) =>
+      setState((prev) => ({ ...prev, formErrors: [...prev.formErrors, ...m] })),
+    [],
+  );
+
   const addFieldError = useCallback(
     (key: string, message: string) =>
       setState((prev) => ({
@@ -29,6 +35,18 @@ export const useErrorHandler = () => {
         fieldErrors: {
           ...prev.fieldErrors,
           [key]: [...(prev.fieldErrors[key] ?? []), message],
+        },
+      })),
+    [],
+  );
+
+  const addFieldErrors = useCallback(
+    (key: string, message: string[]) =>
+      setState((prev) => ({
+        ...prev,
+        fieldErrors: {
+          ...prev.fieldErrors,
+          [key]: [...(prev.fieldErrors[key] ?? []), ...message],
         },
       })),
     [],
@@ -62,5 +80,15 @@ export const useErrorHandler = () => {
     }
   }, []);
 
-  return { ...state, handler: { clear, addError, addFieldError, handle } };
+  return {
+    ...state,
+    handler: {
+      clear,
+      addError,
+      addErrors,
+      addFieldError,
+      addFieldErrors,
+      handle,
+    },
+  };
 };
