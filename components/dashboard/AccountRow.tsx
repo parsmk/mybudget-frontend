@@ -5,18 +5,19 @@ import { Button } from "../ui-kit/Button";
 import { useMemo, useState } from "react";
 import { useEditAccount } from "@/hooks/accounts/useEditAccount";
 import { useDeleteAccount } from "@/hooks/accounts/useDeleteAccount";
+import { CurrencyField } from "../ui-kit/CurrencyField";
 
 export const AccountRow = ({ account }: { account: Account }) => {
   const { mutateAsync: editAccount } = useEditAccount();
   const { mutate: deleteAccount } = useDeleteAccount();
 
   const [name, setName] = useState<string>(account.name);
-  const [balance, setBalance] = useState<number>(account.balance);
+  const [balance, setBalance] = useState<number | undefined>(account.balance);
   const [type, setType] = useState<AccountType>(account.type);
   const [edit, setEdit] = useState<boolean>(false);
 
   const valid = useMemo(() => {
-    if (balance < 0) return false;
+    if (balance == null || balance < 0) return false;
     if (!name || name.trim().length < 1) return false;
 
     return true;
@@ -24,6 +25,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
 
   const handleSubmit = async () => {
     try {
+      if (!balance) return;
       await editAccount({
         id: account.id,
         name: name,
@@ -37,6 +39,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
     <>
       <td>
         <InputField
+          name="name"
           type="text"
           variant="grid"
           state={edit ? "default" : "display"}
@@ -46,12 +49,12 @@ export const AccountRow = ({ account }: { account: Account }) => {
         />
       </td>
       <td>
-        <InputField
+        <CurrencyField
+          name="balance"
           state={edit ? "default" : "display"}
-          type="number"
           variant="grid"
           value={balance}
-          onChange={(e) => setBalance(Number(e.currentTarget.value))}
+          setValue={setBalance}
         />
       </td>
       <td className="p-2">

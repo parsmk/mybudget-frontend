@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { InputField } from "../ui-kit/InputField";
 import { Dropdown } from "../ui-kit/Dropdown";
 import { useCreateAccount } from "@/hooks/accounts/useCreateAccount";
+import { CurrencyField } from "../ui-kit/CurrencyField";
 
 export const AccountsCard = ({
   accounts,
@@ -15,11 +16,11 @@ export const AccountsCard = ({
   const { mutateAsync: createAccount, error: createError } = useCreateAccount();
 
   const [name, setName] = useState<string>("");
-  const [balance, setBalance] = useState<number>(0);
+  const [balance, setBalance] = useState<number | undefined>(0);
   const [type, setType] = useState<AccountType>(AccountType.CHEQUING);
 
   const valid = useMemo(() => {
-    if (balance < 0) return false;
+    if (balance == null || balance < 0) return false;
     if (!name || name.trim().length < 1) return false;
 
     return true;
@@ -27,6 +28,7 @@ export const AccountsCard = ({
 
   const handleSubmit = async () => {
     try {
+      if (!balance) return;
       await createAccount({
         name: name,
         balance: balance,
@@ -64,6 +66,7 @@ export const AccountsCard = ({
           >
             <td>
               <InputField
+                name="name"
                 type="text"
                 variant="grid"
                 value={name}
@@ -72,11 +75,11 @@ export const AccountsCard = ({
               />
             </td>
             <td>
-              <InputField
-                type="number"
+              <CurrencyField
+                name="balance"
                 variant="grid"
                 value={balance}
-                onChange={(e) => setBalance(Number(e.currentTarget.value))}
+                setValue={setBalance}
               />
             </td>
             <td className="p-2">
