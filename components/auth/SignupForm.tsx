@@ -5,7 +5,7 @@ import { Button } from "../ui-kit/Button";
 import { InputField } from "../ui-kit/InputField";
 import { useSignup } from "@/hooks/auth/useSignup";
 import { AuthFormCard } from "./AuthFormCard";
-import { useErrorHandler } from "@/hooks/useErrorState";
+import { useErrorHandler } from "@/hooks/useErrorHandler";
 import {
   isValidEmail as isValidEmail,
   validatePassword,
