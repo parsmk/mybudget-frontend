@@ -6,7 +6,7 @@ import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
 import { Dropdown } from "./ui-kit/Dropdown";
 import { DATE_FORMATS, DateFormat, parseToISODate } from "@/utils/dateParser";
-import { useErrorHandler } from "@/hooks/useErrorState";
+import { useBulkAPIErrorHandler } from "@/hooks/useBulkAPIErrorHandler";
 
 type FileIOModalProps = {
   open: boolean;
@@ -25,7 +25,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     {},
   );
 
-  const { fieldErrors, formErrors, handler } = useErrorHandler();
+  const { commonErrors, generalErrors, handler } = useBulkAPIErrorHandler();
 
   const readDataSheet = async (file: File) => {
     const parsed = XLSX.read(await file.arrayBuffer());
@@ -36,9 +36,9 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
   };
 
   const prepareAndPostData = async () => {
-    handler.clear();
+    handler.clearAll();
     if (firstDataRow < 0 || Object.keys(colAnnotations).length < 1) {
-      handler.addError("Must set first data row and annotate columns!");
+      handler.addGeneralError("Must set first data row and annotate columns!");
       return;
     }
 
@@ -60,120 +60,135 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     }
 
     try {
-      await createTransactions({ data: transactions, accountID });
-      close();
+      const { errors } = await createTransactions({
+        data: transactions,
+        accountID,
+      });
+      if (errors.count === 0) close();
+      console.log();
+      handler.handle(errors.items);
     } catch (error) {
-      handler.handle(error);
+      if (error instanceof Error) handler.addGeneralError(error.message);
     }
   };
 
   return (
     <Modal
       close={() => {
-        close();
+        handler.clearAll();
         setSheetData([]);
+        close();
       }}
       open={open}
     >
-      {sheetData.length > 0 ? (
-        <>
-          <p>Select the first row of data with the checkbox!</p>
-          <div className="overflow-x-auto rounded-md border my-2">
-            <table className="divide-y ">
-              <tbody className="divide-y divide-foreground">
-                {sheetData.slice(0, 5).map((row, rowNum) => (
-                  <tr key={rowNum} className="divide-x">
-                    <td className="p-2">
-                      <input
-                        type="checkbox"
-                        checked={firstDataRow === rowNum}
-                        onChange={() => setFirstDataRow(rowNum)}
-                      />
-                    </td>
-                    {row.map((cell, cellKey) => (
-                      <td className="p-2" key={cellKey}>
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot className="divide-y divide-foreground">
-                <tr className="divide-x">
-                  <td></td>
-                  {sheetData.length > 0 &&
-                    sheetData.at(sheetData.length - 1)?.map((_, i) => (
-                      <td key={i}>
-                        <Dropdown
-                          options={["date", "payee", "inflow", "outflow"]}
-                          defaultOption="--select--"
-                          value={colAnnotations[i]}
-                          onChange={(e) => {
-                            const value = e.currentTarget.value;
-                            if (!value) return;
-                            setColAnnotations((prev) => ({
-                              ...prev,
-                              [i]: value,
-                            }));
-                          }}
-                        />
-                      </td>
-                    ))}
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-          <p>Use these dropdowns to select what each column represents</p>
-          <div className="flex gap-x-2 my-2">
-            <span>Date Format: </span>
+      <div className="flex flex-col w-full h-full">
+        {sheetData.length > 0 ? (
+          <>
             <div className="grow">
-              <Dropdown
-                variant="default"
-                value={dateFormat}
-                options={DATE_FORMATS.map((d) => d)}
-                onChange={(e) =>
-                  setDateFormat(e.currentTarget.value as DateFormat)
-                }
-              />
+              <p>Select the first row of data with the checkbox!</p>
+              <div className="overflow-x-auto rounded-md border my-2">
+                <table className="divide-y w-full">
+                  <tbody className="divide-y divide-foreground">
+                    {sheetData.slice(0, 5).map((row, rowNum) => (
+                      <tr key={rowNum} className="divide-x">
+                        <td className="p-2">
+                          <input
+                            type="checkbox"
+                            checked={firstDataRow === rowNum}
+                            onChange={() => setFirstDataRow(rowNum)}
+                          />
+                        </td>
+                        {row.map((cell, cellKey) => (
+                          <td className="p-2" key={cellKey}>
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="divide-y divide-foreground">
+                    <tr className="divide-x">
+                      <td></td>
+                      {sheetData.length > 0 &&
+                        sheetData.at(sheetData.length - 1)?.map((_, i) => (
+                          <td key={i}>
+                            <Dropdown
+                              options={["date", "payee", "inflow", "outflow"]}
+                              defaultOption="--select--"
+                              value={colAnnotations[i]}
+                              onChange={(e) => {
+                                const value = e.currentTarget.value;
+                                if (!value) return;
+                                setColAnnotations((prev) => ({
+                                  ...prev,
+                                  [i]: value,
+                                }));
+                              }}
+                            />
+                          </td>
+                        ))}
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <p>Use these dropdowns to select what each column represents</p>
+              <div className="flex gap-x-2 my-2">
+                <span>Date Format: </span>
+                <div className="grow">
+                  <Dropdown
+                    variant="default"
+                    value={dateFormat}
+                    options={DATE_FORMATS.map((d) => d)}
+                    onChange={(e) =>
+                      setDateFormat(e.currentTarget.value as DateFormat)
+                    }
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center mt-3">
-            <div className="grow flex flex-wrap mx-2">
-              {formErrors.map((err, i) => (
-                <p className="text-danger" key={i}>
-                  {err}
-                </p>
-              ))}
+            <div className="flex items-center mt-3">
+              <div className="grow mx-2">
+                {generalErrors.map((err, i) => (
+                  <p className="text-danger" key={i}>
+                    {err}
+                  </p>
+                ))}
+                {commonErrors.map((err, i) => (
+                  <p className="text-danger" key={i}>
+                    {err}
+                  </p>
+                ))}
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => prepareAndPostData()}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
-            <div>
-              <Button
-                type="button"
-                variant="primary"
-                onClick={() => prepareAndPostData()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <Button type="button" onClick={() => inputRef.current?.click()}>
-            Upload files
-          </Button>
-          <input
-            type="file"
-            hidden
-            ref={inputRef}
-            onChange={(e) => {
-              const input = e.currentTarget.files?.item(0);
-              if (!input) return;
-              readDataSheet(input);
-              e.currentTarget.value = "";
-            }}
-          />
-        </>
-      )}
+          </>
+        ) : (
+          <>
+            <Button type="button" onClick={() => inputRef.current?.click()}>
+              Upload files
+            </Button>
+            <input
+              type="file"
+              hidden
+              ref={inputRef}
+              onChange={(e) => {
+                const input = e.currentTarget.files?.item(0);
+                if (!input) return;
+                readDataSheet(input);
+                e.currentTarget.value = "";
+              }}
+            />
+          </>
+        )}
+      </div>
     </Modal>
   );
 };
