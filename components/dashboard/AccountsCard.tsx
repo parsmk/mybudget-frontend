@@ -28,7 +28,7 @@ export const AccountsCard = ({
 
   const handleSubmit = async () => {
     try {
-      if (!balance) return;
+      if (balance == null) return;
       await createAccount({
         name: name,
         balance: balance,

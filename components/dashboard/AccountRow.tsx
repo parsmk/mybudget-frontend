@@ -25,7 +25,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
 
   const handleSubmit = async () => {
     try {
-      if (!balance) return;
+      if (balance == null) return;
       await editAccount({
         id: account.id,
         name: name,
