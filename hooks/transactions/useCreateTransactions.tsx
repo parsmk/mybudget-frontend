@@ -18,9 +18,7 @@ export const useCreateTransaction = () => {
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({
-        queryKey: ["accounts", variables.accountID],
-      });
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
     },
   });
 };
