@@ -16,8 +16,8 @@ export const BarChart = <T,>({
   shareFn,
 }: BarChartProps<T>) => {
   return (
-    <div className="flex h-full w-full items-center p-5">
-      <div className="grid grid-cols-[auto_1fr_1fr] items-center gap-2">
+    <div className="flex flex-col sm:flex-row h-full w-full items-center p-5 gap-3">
+      <div className="grid grid-cols-[auto_1fr_1fr] order-2 sm:order-1 shrink-0 items-center gap-2">
         {data.map((d, i) => (
           <React.Fragment key={i}>
             <div style={{ backgroundColor: fillFn(d) }} className="size-5" />
@@ -26,7 +26,7 @@ export const BarChart = <T,>({
           </React.Fragment>
         ))}
       </div>
-      <div className="flex h-[50%] border-1 border-foreground grow mx-5">
+      <div className="flex w-full h-10 border-1 border-foreground grow mx-5">
         {data.map((d, i) => (
           <div
             key={i}

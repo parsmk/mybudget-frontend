@@ -17,16 +17,24 @@ export const Navbar = () => {
     <div className="flex sm:flex-col p-2 bg-primary">
       <div className="grow">
         <NavItem
-          onClick={() => router.push(ROUTES.PORTAL.DASHBOARD)}
+          onClick={() => {
+            router.push(ROUTES.PORTAL.DASHBOARD);
+            setShowAccounts(false);
+          }}
           label="Dashboard"
         />
         <NavItem
-          onClick={() => router.push(ROUTES.PORTAL.SYNOPSIS)}
+          onClick={() => {
+            router.push(ROUTES.PORTAL.SYNOPSIS);
+            setShowAccounts(false);
+          }}
           label="Synopsis"
         />
         <NavItem
           label="Accounts"
-          onClick={() => setShowAccounts(!showAccounts)}
+          onClick={() => {
+            setShowAccounts(!showAccounts);
+          }}
         />
         {accounts &&
           showAccounts &&
@@ -34,7 +42,10 @@ export const Navbar = () => {
             <NavItem
               key={a.id}
               label={a.name}
-              onClick={() => router.push(ROUTES.PORTAL.ACCOUNT(a.id))}
+              onClick={() => {
+                router.push(ROUTES.PORTAL.ACCOUNT(a.id));
+                setShowAccounts(false);
+              }}
             />
           ))}
       </div>

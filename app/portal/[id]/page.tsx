@@ -36,36 +36,36 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           accountID={account.id}
         />
       )}
-      <div className="px-2 py-5 flex">
-        <div className="space-y-2">
+      <div className="px-2 py-5 flex flex-col gap-5 sm:flex-row">
+        <div className="space-y-2 w-full sm:w-[10%]">
           <Button type="button" onClick={() => setOpen(true)} fullWidth>
             Import Statement
           </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <InputField
-                value={from.toISOString().slice(0, 10)}
-                onChange={(e) => setFrom(new Date(e.currentTarget.value))}
-                name="from"
-                label="From"
-                type="date"
-              />
-              <InputField
-                value={to.toISOString().slice(0, 10)}
-                onChange={(e) => setTo(new Date(e.currentTarget.value))}
-                name="to"
-                label="To"
-                type="date"
-              />
-            </div>
+        </div>
+        <div className="flex gap-5">
+          <div className="my-auto">
+            <h2 className="text-2xl font-bold">{account?.name}</h2>
+            <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
+            <h3 className="text-xl">{account?.type}</h3>
+          </div>
+          <div className="grid sm:grid-cols-[auto_1fr] items-center grow gap-2">
+            <label htmlFor="from">From:</label>
+            <InputField
+              value={from.toISOString().slice(0, 10)}
+              onChange={(e) => setFrom(new Date(e.currentTarget.value))}
+              name="from"
+              type="date"
+            />
+            <label htmlFor="to">To:</label>
+            <InputField
+              value={to.toISOString().slice(0, 10)}
+              onChange={(e) => setTo(new Date(e.currentTarget.value))}
+              name="to"
+              type="date"
+            />
           </div>
         </div>
-        <div className="px-5">
-          <h2 className="text-2xl font-bold">{account?.name}</h2>
-          <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
-          <h3 className="text-xl">{account?.type}</h3>
-        </div>
-        <div className="px-5 flex grow items-center justify-center">
+        <div className="flex grow items-center justify-center">
           {chartData && chartData?.length > 0 && (
             <BarChart
               data={chartData}

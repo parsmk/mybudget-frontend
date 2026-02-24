@@ -10,7 +10,7 @@ const PortalLandingPage = () => {
   const { data: categories } = useCategories();
   const { data: accounts } = useAccounts();
   return (
-    <div className="h-full grid gap-10 grid-cols-2 grid-rows-2 p-10">
+    <div className="h-full grid gap-10 sm:grid-cols-2 sm:grid-rows-2 p-10">
       <div className="col-span-full">
         <DashboardCard>
           <h2 className="h-full text-5xl w-full flex justify-center items-center">
