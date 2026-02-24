@@ -108,7 +108,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<CreateObjectResponse<Transaction>>("transaction/", {
+    return this.request<CreateObjectResponse<Transaction>>("transaction/bulk", {
       method: "POST",
       body: JSON.stringify(data),
     });

@@ -7,7 +7,7 @@ import { useLogin } from "@/hooks/auth/useLogin";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/app/_route-map";
 import { AuthFormCard } from "./AuthFormCard";
-import { useErrorHandler } from "@/hooks/useErrorState";
+import { useErrorHandler } from "@/hooks/useErrorHandler";
 import { isValidEmail } from "@/utils/authValidation";
 
 export const LoginForm = () => {

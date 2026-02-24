@@ -1,6 +1,9 @@
 export type CreateObjectResponse<T> = {
-  errors: { count: number; reasons: string[] };
-  success: { count: number; uploaded: T[] };
+  errors: {
+    count: number;
+    items: { index: string; errors: ErrorResponse }[];
+  };
+  success: { count: number; items: T[] };
 };
 
 export type ErrorResponse = {

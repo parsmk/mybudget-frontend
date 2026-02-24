@@ -18,18 +18,7 @@ export const useEditTransaction = () => {
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      const oldAccountID = variables.oldAccountID;
-      const newAccountID = data.account_id;
-
-      queryClient.invalidateQueries({
-        queryKey: ["accounts", oldAccountID],
-      });
-
-      if (newAccountID && oldAccountID !== newAccountID) {
-        queryClient.invalidateQueries({
-          queryKey: ["accounts", newAccountID],
-        });
-      }
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
     },
   });
 };
