@@ -205,6 +205,7 @@ export class APIClient {
       response = await fetch(url, {
         ...init,
         headers,
+        signal: AbortSignal.timeout(5000),
       });
     } catch (error) {
       throw new Error(
