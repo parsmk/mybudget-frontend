@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Transaction } from "@/api/transaction";
+import { EditTransactionRequest, Transaction } from "@/api/transaction";
 import { Category } from "@/api/category";
 
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
@@ -38,6 +38,8 @@ export const TransactionRow = ({
     transaction.outflow,
   );
 
+  console.log(transaction);
+
   useEffect(() => {
     setCat(transaction.category ?? null);
     setDate(transaction.date);
@@ -58,9 +60,9 @@ export const TransactionRow = ({
 
   const handleSubmit = async () => {
     try {
-      const patch = {
+      const patch: EditTransactionRequest = {
         id: transaction.id,
-        categoryID:
+        category_id:
           cat?.id === transaction.category?.id ? undefined : (cat?.id ?? null),
         date: date === transaction.date ? undefined : date,
         payee: payee === transaction.payee ? undefined : payee,
