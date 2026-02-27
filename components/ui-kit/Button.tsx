@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Spinner } from "./Spinner";
 
 type ButtonVariants = "primary" | "secondary" | "danger" | "outline";
 
@@ -43,7 +44,7 @@ export const Button = ({
 
   const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : null;
 
-  const loadingClass = loading ? "opacity-50 cursor-wait" : null;
+  const loadingClass = loading ? "opacity-50 cursor-default" : null;
 
   const sizeClasses: Record<ButtonSizes, string> = {
     sm: `${fullWidth ? "w-full" : "w-[5rem]"} h-[2rem]`,
@@ -60,7 +61,7 @@ export const Button = ({
       type={type}
       onClick={() => onClick?.()}
     >
-      {children ?? type}
+      {loading ? <Spinner className="size-5" /> : (children ?? type)}
     </button>
   );
 };
