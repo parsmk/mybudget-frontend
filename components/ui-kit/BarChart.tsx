@@ -16,27 +16,33 @@ export const BarChart = <T,>({
   shareFn,
 }: BarChartProps<T>) => {
   return (
-    <div className="flex flex-col sm:flex-row h-full w-full items-center p-5 gap-3">
-      <div className="grid grid-cols-[auto_1fr_1fr] order-2 sm:order-1 shrink-0 items-center gap-2">
+    <div className="flex flex-col h-full w-full items-center px-5">
+      <div className="flex order-2 sm:order-1 shrink-0 items-center flex-wrap my-2">
         {data.map((d, i) => (
-          <React.Fragment key={i}>
+          <div
+            className="sm:flex grid grid-cols-[auto_1fr_1fr] items-center gap-2 m-2 grow sm:mx-5"
+            key={i}
+          >
             <div style={{ backgroundColor: fillFn(d) }} className="size-5" />
-            <div>: {labelFn(d)}</div>
-            <div>| {valueFn(d)}</div>
-          </React.Fragment>
+            <span className="truncate">: {labelFn(d)}</span>
+            <span>| ${valueFn(d)}</span>
+          </div>
         ))}
       </div>
       <div className="flex w-full h-10 border-1 border-foreground grow mx-5">
-        {data.map((d, i) => (
-          <div
-            key={i}
-            className="h-full first:border-none last:border-none border-x-2 border-foreground"
-            style={{
-              width: `${shareFn(d).toFixed()}%`,
-              backgroundColor: fillFn(d),
-            }}
-          />
-        ))}
+        {data.map((d, i) => {
+          if (shareFn(d) === 0) return;
+          return (
+            <div
+              key={i}
+              className="h-full first:border-none last:border-none border-l-2 border-foreground"
+              style={{
+                width: `${shareFn(d).toFixed()}%`,
+                backgroundColor: fillFn(d),
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
