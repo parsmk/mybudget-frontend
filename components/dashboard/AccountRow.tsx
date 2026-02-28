@@ -1,6 +1,6 @@
 import { Account, AccountType } from "@/api/account";
 import { InputField } from "../ui-kit/InputField";
-import { Dropdown } from "../ui-kit/Dropdown";
+import { SelectField } from "../ui-kit/SelectField";
 import { Button } from "../ui-kit/Button";
 import { useMemo, useState } from "react";
 import { useEditAccount } from "@/hooks/accounts/useEditAccount";
@@ -58,7 +58,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
         />
       </td>
       <td className="p-2">
-        <Dropdown
+        <SelectField
           disabled={!edit}
           options={Object.values(AccountType)}
           value={type}

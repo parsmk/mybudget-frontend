@@ -1,5 +1,5 @@
 import { useCategories } from "@/hooks/categories/useCategories";
-import { Dropdown } from "./ui-kit/Dropdown";
+import { SelectField } from "./ui-kit/SelectField";
 import { Category } from "@/api/category";
 import React, { Dispatch, SetStateAction } from "react";
 
@@ -17,7 +17,7 @@ export const CategoryDropdown = ({
   const { data: categories } = useCategories();
 
   return (
-    <Dropdown
+    <SelectField
       value={value}
       labelFn={(c) => {
         if (c) return c.name;

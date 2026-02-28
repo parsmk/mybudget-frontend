@@ -4,7 +4,7 @@ import { AccountRow } from "./AccountRow";
 import { Button } from "../ui-kit/Button";
 import { useMemo, useState } from "react";
 import { InputField } from "../ui-kit/InputField";
-import { Dropdown } from "../ui-kit/Dropdown";
+import { SelectField } from "../ui-kit/SelectField";
 import { useCreateAccount } from "@/hooks/accounts/useCreateAccount";
 import { CurrencyField } from "../ui-kit/CurrencyField";
 
@@ -83,7 +83,7 @@ export const AccountsCard = ({
               />
             </td>
             <td className="p-2">
-              <Dropdown<AccountType>
+              <SelectField<AccountType>
                 options={Object.values(AccountType)}
                 value={type}
                 onChange={(e) => setType(e.target.value as AccountType)}

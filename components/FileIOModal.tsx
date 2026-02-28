@@ -4,7 +4,7 @@ import { Button } from "./ui-kit/Button";
 import * as XLSX from "xlsx";
 import { CreateTransactionRequest } from "@/api/transaction";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransactions";
-import { Dropdown } from "./ui-kit/Dropdown";
+import { SelectField } from "./ui-kit/SelectField";
 import { DATE_FORMATS, DateFormat, parseToISODate } from "@/utils/dateParser";
 import { useBulkAPIErrorHandler } from "@/hooks/useBulkAPIErrorHandler";
 
@@ -112,7 +112,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
                       {sheetData.length > 0 &&
                         sheetData.at(sheetData.length - 1)?.map((_, i) => (
                           <td key={i}>
-                            <Dropdown
+                            <SelectField
                               options={["date", "payee", "inflow", "outflow"]}
                               defaultOption="--select--"
                               value={colAnnotations[i]}
@@ -135,7 +135,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
               <div className="flex gap-x-2 my-2">
                 <span>Date Format: </span>
                 <div className="grow">
-                  <Dropdown
+                  <SelectField
                     variant="default"
                     value={dateFormat}
                     options={DATE_FORMATS.map((d) => d)}
