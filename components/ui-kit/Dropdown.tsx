@@ -1,46 +1,23 @@
-import React from "react";
+"use client";
 
-type DropdownProps<T> = {
-  options: T[];
-  labelFn?: (item: T) => string;
-  idFn?: (item: T) => string;
-  value?: T;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
-  defaultOption?: string;
-  disabled?: boolean;
-  variant?: "grid" | "default";
+import { createPortal } from "react-dom";
+
+type DropdownProps = {
+  children: React.ReactNode;
+  target: React.RefObject<Element | null>;
+  open?: boolean;
 };
 
-export const Dropdown = <T,>({
-  options,
-  labelFn = (item: T) => String(item),
-  idFn = (item: T) => String(item),
-  value,
-  onChange,
-  defaultOption,
-  disabled,
-  variant = "grid",
-}: DropdownProps<T>) => {
-  const optionClasses = "bg-background";
-  const variantClasses =
-    variant === "default" ? "border-1 border-foreground/50" : "";
-  return (
-    <select
-      className={`w-full h-full rounded-md focus:outline-none focus:ring-none ${variantClasses}`}
-      value={value ? idFn(value) : "none"}
-      onChange={(e) => onChange?.(e)}
-      disabled={disabled}
+export const Dropdown = ({ children, target, open = false }: DropdownProps) => {
+  const pos = target.current?.getBoundingClientRect();
+
+  return createPortal(
+    <div
+      style={{ top: pos ? pos.bottom + 2 : 0, left: pos?.left }}
+      className={`${open ? "block" : "hidden"} absolute bg-secondary rounded-md divide-y divide-tertiary border-1 border-tertiary`}
     >
-      {defaultOption ? (
-        <option value={"none"} className={optionClasses}>
-          {defaultOption}
-        </option>
-      ) : null}
-      {options.map((o) => (
-        <option key={idFn(o)} value={idFn(o)} className={optionClasses}>
-          {labelFn(o)}
-        </option>
-      ))}
-    </select>
+      {children}
+    </div>,
+    document.body,
   );
 };

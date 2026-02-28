@@ -5,50 +5,39 @@ import { NavItem } from "./NavItem";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useRouter } from "next/navigation";
 import { useAccounts } from "@/hooks/accounts/useAccounts";
-import { useState } from "react";
+import { NavDropdown } from "./NavDropdown";
 
 export const Navbar = () => {
   const router = useRouter();
   const { mutate: logout } = useLogout();
   const { data: accounts } = useAccounts();
-  const [showAccounts, setShowAccounts] = useState<boolean>(false);
 
   return (
     <div className="flex sm:flex-col p-2 bg-primary">
-      <div className="grow">
+      <NavDropdown>
         <NavItem
           onClick={() => {
             router.push(ROUTES.PORTAL.DASHBOARD);
-            setShowAccounts(false);
           }}
           label="Dashboard"
         />
         <NavItem
           onClick={() => {
             router.push(ROUTES.PORTAL.SYNOPSIS);
-            setShowAccounts(false);
           }}
           label="Synopsis"
         />
-        <NavItem
-          label="Accounts"
-          onClick={() => {
-            setShowAccounts(!showAccounts);
-          }}
-        />
         {accounts &&
-          showAccounts &&
           accounts.map((a) => (
             <NavItem
               key={a.id}
               label={a.name}
               onClick={() => {
                 router.push(ROUTES.PORTAL.ACCOUNT(a.id));
-                setShowAccounts(false);
               }}
             />
           ))}
-      </div>
+      </NavDropdown>
       <div>
         <NavItem
           onClick={async () => {
