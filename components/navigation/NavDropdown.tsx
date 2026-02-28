@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { Dropdown } from "../ui-kit/Dropdown";
 import { Hamburger } from "../svgs/Hamburger";
