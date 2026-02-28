@@ -9,8 +9,9 @@ type DropdownProps = {
 };
 
 export const Dropdown = ({ children, target, open = false }: DropdownProps) => {
-  const pos = target.current?.getBoundingClientRect();
+  if (!open) return;
 
+  const pos = target.current?.getBoundingClientRect();
   return createPortal(
     <div
       style={{ top: pos ? pos.bottom + 2 : 0, left: pos?.left }}
