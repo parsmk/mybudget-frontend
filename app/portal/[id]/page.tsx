@@ -36,19 +36,17 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           accountID={account.id}
         />
       )}
-      <div className="px-2 py-5 flex flex-col gap-5 sm:flex-row shrink-0">
-        <div className="space-y-2 w-full sm:w-[10%]">
-          <Button type="button" onClick={() => setOpen(true)} fullWidth>
-            Import Statement
-          </Button>
-        </div>
-        <div className="flex gap-5 shrink-0">
-          <div className="my-auto">
+      <div className="grid sm:grid-cols-[auto_auto_1fr] gap-3 m-2">
+        <Button type="button" onClick={() => setOpen(true)} fullWidth>
+          Import Statement
+        </Button>
+        <div className="flex gap-5">
+          <div>
             <h2 className="text-2xl font-bold">{account?.name}</h2>
             <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>
             <h3 className="text-xl">{account?.type}</h3>
           </div>
-          <div className="grid sm:grid-cols-[auto_1fr] items-center grow gap-2 shrink-0">
+          <div className="items-center gap-2">
             <label htmlFor="from">From:</label>
             <InputField
               value={from.toISOString().slice(0, 10)}

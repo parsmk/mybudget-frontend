@@ -29,7 +29,7 @@ export const BarChart = <T,>({
           </div>
         ))}
       </div>
-      <div className="flex w-full h-10 border-1 border-foreground grow mx-5">
+      <div className="flex w-full h-10 border-1 border-foreground  mx-5 shrink-0">
         {data.map((d, i) => {
           if (shareFn(d) === 0) return;
           return (
