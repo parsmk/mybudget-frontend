@@ -1,6 +1,6 @@
 "use client";
 
-import { AccountsCard } from "@/components/dashboard/AccountsCard";
+import { AccountsCard } from "@/components/account/AccountsCard";
 import { CategoriesCard } from "@/components/category/CategoriesCard";
 import { DashboardCard } from "@/components/DashboardCard";
 import { useAccounts } from "@/hooks/accounts/useAccounts";
