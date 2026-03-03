@@ -11,7 +11,7 @@ import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
 import { CurrencyField } from "../ui-kit/CurrencyField";
 
-import { CategoryDropdown } from "../CategoryDropdown";
+import { CategoryDropdown } from "../category/CategoryDropdown";
 import { TransactionCell } from "./TransactionCell";
 
 export const TransactionRow = ({

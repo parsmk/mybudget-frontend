@@ -1,9 +1,9 @@
 import { useCreateCategory } from "@/hooks/categories/useCreateCategory";
-import { DashboardCard } from "./DashboardCard";
+import { DashboardCard } from "../dashboard/DashboardCard";
 import { Category } from "@/api/category";
 import { InputField } from "../ui-kit/InputField";
 import { useState } from "react";
-import { CategoryRow } from "./CategoryRow";
+import { CategoryRow } from "../category/CategoryRow";
 
 export const CategoriesCard = ({
   categories,
