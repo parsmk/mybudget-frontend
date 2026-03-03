@@ -11,6 +11,7 @@ type AccountCellsProps = {
   setBalance: Dispatch<SetStateAction<number>>;
   type: AccountType;
   setType: Dispatch<SetStateAction<AccountType>>;
+  disabled?: boolean;
 };
 
 export const AccountCells = ({
@@ -20,6 +21,7 @@ export const AccountCells = ({
   setBalance,
   type,
   setType,
+  disabled = false,
 }: AccountCellsProps) => {
   return (
     <>
@@ -28,6 +30,7 @@ export const AccountCells = ({
           name="name"
           type="text"
           variant="grid"
+          disabled={disabled}
           value={name}
           placeholder="account title..."
           onChange={(e) => setName(e.currentTarget.value)}
@@ -38,6 +41,7 @@ export const AccountCells = ({
           name="balance"
           variant="grid"
           value={balance}
+          disabled={disabled}
           setValue={(v) => setBalance(v ?? 0)}
         />
       </td>
@@ -47,6 +51,7 @@ export const AccountCells = ({
           value={type}
           onChange={(e) => setType(e.target.value as AccountType)}
           labelFn={(t) => t}
+          disabled={disabled}
         />
       </td>
     </>

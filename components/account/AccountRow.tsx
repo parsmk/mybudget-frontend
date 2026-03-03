@@ -42,6 +42,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
         setName={setName}
         setBalance={setBalance}
         setType={setType}
+        disabled={!edit}
       />
       <td className="p-2 flex items-center h-full w-full justify-around">
         <Button
@@ -60,9 +61,9 @@ export const AccountRow = ({ account }: { account: Account }) => {
         <Button
           size="sm"
           variant="danger"
-          onClick={() => deleteAccount(account.id)}
+          onClick={() => (edit ? setEdit(!edit) : deleteAccount(account.id))}
         >
-          Delete
+          {edit ? "Cancel" : "Delete"}
         </Button>
       </td>
     </>

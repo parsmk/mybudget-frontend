@@ -35,8 +35,8 @@ export const CategoryRow = ({ category }: { category: Category }) => {
       <InputField
         ref={inputRef}
         type="text"
-        state={edit ? "default" : "display"}
         variant="grid"
+        disabled={!edit}
         name={category.id}
         onChange={(e) => setCat(e.currentTarget.value)}
         onKeyDown={(e) => {
