@@ -1,4 +1,4 @@
-import { DashboardCard } from "./DashboardCard";
+import { DashboardCard } from "../DashboardCard";
 import { Account, AccountType } from "@/api/account";
 import { AccountRow } from "./AccountRow";
 import { Button } from "../ui-kit/Button";

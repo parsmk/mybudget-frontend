@@ -2,7 +2,7 @@
 
 import { AccountsCard } from "@/components/dashboard/AccountsCard";
 import { CategoriesCard } from "@/components/category/CategoriesCard";
-import { DashboardCard } from "@/components/dashboard/DashboardCard";
+import { DashboardCard } from "@/components/DashboardCard";
 import { useAccounts } from "@/hooks/accounts/useAccounts";
 import { useCategories } from "@/hooks/categories/useCategories";
 

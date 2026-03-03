@@ -1,5 +1,5 @@
 import { useCreateCategory } from "@/hooks/categories/useCreateCategory";
-import { DashboardCard } from "../dashboard/DashboardCard";
+import { DashboardCard } from "../DashboardCard";
 import { Category } from "@/api/category";
 import { InputField } from "../ui-kit/InputField";
 import { useState } from "react";
