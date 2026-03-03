@@ -7,13 +7,7 @@ export const useCreateTransaction = () => {
   const apiClient = useApiClient();
 
   return useMutation({
-    mutationFn: async ({
-      data,
-      accountID,
-    }: {
-      data: CreateTransactionRequest[];
-      accountID: string;
-    }) => {
+    mutationFn: async (data: CreateTransactionRequest[]) => {
       return await apiClient.createTransactions(data);
     },
     onSuccess: (data, variables, onMutateResult, context) => {
