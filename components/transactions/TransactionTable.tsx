@@ -17,13 +17,15 @@ export const TRANSACTION_HEADINGS = [
 ] as const;
 export type TransactionHeadings = (typeof TRANSACTION_HEADINGS)[number];
 
+type TransactionTableProps = {
+  transactions: Transaction[];
+  showAccount?: boolean;
+};
+
 export const TransactionTable = ({
   transactions,
   showAccount = false,
-}: {
-  transactions: Transaction[];
-  showAccount?: boolean;
-}) => {
+}: TransactionTableProps) => {
   const { mutateAsync: deleteTransactions, isPending: deleting } =
     useDeleteTransactions();
 

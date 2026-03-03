@@ -38,8 +38,6 @@ export const TransactionRow = ({
     transaction.outflow,
   );
 
-  console.log(transaction);
-
   useEffect(() => {
     setCat(transaction.category ?? null);
     setDate(transaction.date);
@@ -74,10 +72,7 @@ export const TransactionRow = ({
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as typeof patch;
 
-      const updated = await editTransaction({
-        patch: cleanedPatch,
-        oldAccountID: transaction.account_id,
-      });
+      const updated = await editTransaction(cleanedPatch);
 
       setCat(updated.category ?? null);
       setDate(updated.date);
