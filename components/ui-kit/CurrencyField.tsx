@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { InputField, InputFieldStates, InputFieldVariants } from "./InputField";
 
 type CurrencyFieldProps = {
@@ -7,7 +7,7 @@ type CurrencyFieldProps = {
   variant?: InputFieldVariants;
   state?: InputFieldStates;
   errors?: string[];
-  setValue?: Dispatch<SetStateAction<number | undefined>>;
+  setValue?: (v: number | undefined) => void;
 };
 
 function parseMoneyText(s: string) {

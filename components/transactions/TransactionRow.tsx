@@ -123,7 +123,7 @@ export const TransactionRow = ({
           name="inflow"
           value={inflow}
           variant="grid"
-          setValue={setInflow}
+          setValue={(v) => setInflow(v)}
         />
       </TransactionCell>
       <TransactionCell>
@@ -131,7 +131,7 @@ export const TransactionRow = ({
           name="outflow"
           value={outflow}
           variant="grid"
-          setValue={setOutflow}
+          setValue={(v) => setOutflow(v)}
         />
       </TransactionCell>
       {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}
