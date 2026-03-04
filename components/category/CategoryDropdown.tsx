@@ -1,18 +1,15 @@
 import { useCategories } from "@/hooks/categories/useCategories";
 import { SelectField } from "../ui-kit/SelectField";
 import { Category } from "@/api/category";
-import { Dispatch, SetStateAction } from "react";
 
 type CategoryDropdownProps = {
   value: Category | null;
-  setValue: Dispatch<SetStateAction<Category | null>>;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  setValue: (cat: Category | null) => void;
 };
 
 export const CategoryDropdown = ({
   value,
   setValue,
-  onChange,
 }: CategoryDropdownProps) => {
   const { data: categories } = useCategories();
 
@@ -30,7 +27,6 @@ export const CategoryDropdown = ({
       onChange={(e) => {
         const val = categories?.find((c) => c.id === e.currentTarget.value);
         setValue(val ?? null);
-        onChange?.(e);
       }}
       options={categories ?? []}
       defaultOption={"uncategorized"}
