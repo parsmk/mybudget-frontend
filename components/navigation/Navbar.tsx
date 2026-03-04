@@ -13,7 +13,7 @@ export const Navbar = () => {
   const { data: accounts } = useAccounts();
 
   return (
-    <div className="flex sm:flex-col p-2 bg-primary">
+    <div className="flex sm:flex-col p-2 bg-primary sm:w-30">
       <NavDropdown>
         <NavItem
           onClick={() => {

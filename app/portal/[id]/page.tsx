@@ -36,11 +36,11 @@ const AccountPage = ({ params }: { params: Promise<{ id: string }> }) => {
           accountID={account.id}
         />
       )}
-      <div className="grid sm:grid-cols-[auto_auto_1fr] gap-3 m-2">
+      <div className="grid sm:grid-cols-[1fr_2fr_7fr] gap-3 m-2">
         <Button type="button" onClick={() => setOpen(true)} fullWidth>
           Import Statement
         </Button>
-        <div className="flex gap-5">
+        <div className="grid sm:grid-cols-2 gap-5">
           <div>
             <h2 className="text-2xl font-bold">{account?.name}</h2>
             <h3 className="text-xl">${Number(account?.balance).toFixed(2)}</h3>

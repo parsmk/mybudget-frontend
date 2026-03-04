@@ -129,7 +129,7 @@ export const TransactionTable = ({
   };
 
   return (
-    <table className="w-full text-justify table-fixed">
+    <table className="w-full text-justify">
       <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0 z-10">
         <tr>
           <TransactionHeader isFilter={false}>
@@ -177,7 +177,7 @@ export const TransactionTable = ({
             {hasAnyEdits && (
               <Button
                 type="button"
-                variant="primary"
+                variant="secondary"
                 size="sm"
                 onClick={() => handleEdit()}
                 disabled={editing}

@@ -15,6 +15,7 @@ export const AccountRow = ({ account }: { account: Account }) => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const valid = useMemo(() => {
+    if (!edit) return true;
     if (balance == null || balance < 0) return false;
     if (!name || name.trim().length < 1) return false;
 
