@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { InputField, InputFieldStates, InputFieldVariants } from "./InputField";
+import { useEffect, useState } from "react";
+import { InputField, InputFieldVariants } from "./InputField";
 
 type CurrencyFieldProps = {
   name: string;
   value?: number;
   variant?: InputFieldVariants;
-  state?: InputFieldStates;
   errors?: string[];
-  setValue?: Dispatch<SetStateAction<number | undefined>>;
+  disabled?: boolean;
+  setValue?: (v: number | undefined) => void;
 };
 
 function parseMoneyText(s: string) {
@@ -21,8 +21,8 @@ export const CurrencyField = ({
   name,
   value,
   variant,
-  state,
   errors,
+  disabled,
   setValue,
 }: CurrencyFieldProps) => {
   const [_value, _setValue] = useState<string>(String(value?.toFixed(2) ?? ""));
@@ -36,9 +36,9 @@ export const CurrencyField = ({
       name={name}
       type="text"
       value={_value}
-      state={state}
       variant={variant}
       errors={errors}
+      disabled={disabled}
       placeholder={(0).toFixed(2)}
       onChange={(e) => _setValue(e.currentTarget.value)}
       onBlur={() => {

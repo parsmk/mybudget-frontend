@@ -1,12 +1,10 @@
-import { DashboardCard } from "./DashboardCard";
+import { DashboardCard } from "../DashboardCard";
 import { Account, AccountType } from "@/api/account";
 import { AccountRow } from "./AccountRow";
 import { Button } from "../ui-kit/Button";
 import { useMemo, useState } from "react";
-import { InputField } from "../ui-kit/InputField";
-import { SelectField } from "../ui-kit/SelectField";
 import { useCreateAccount } from "@/hooks/accounts/useCreateAccount";
-import { CurrencyField } from "../ui-kit/CurrencyField";
+import { AccountCells } from "./AccountCells";
 
 export const AccountsCard = ({
   accounts,
@@ -16,7 +14,7 @@ export const AccountsCard = ({
   const { mutateAsync: createAccount, error: createError } = useCreateAccount();
 
   const [name, setName] = useState<string>("");
-  const [balance, setBalance] = useState<number | undefined>(0);
+  const [balance, setBalance] = useState<number>(0);
   const [type, setType] = useState<AccountType>(AccountType.CHEQUING);
 
   const valid = useMemo(() => {
@@ -64,32 +62,14 @@ export const AccountsCard = ({
           <tr
             className={`${rowClasses} ${createError ? "!border-danger/10" : ""}`}
           >
-            <td>
-              <InputField
-                name="name"
-                type="text"
-                variant="grid"
-                value={name}
-                placeholder="account title..."
-                onChange={(e) => setName(e.currentTarget.value)}
-              />
-            </td>
-            <td>
-              <CurrencyField
-                name="balance"
-                variant="grid"
-                value={balance}
-                setValue={setBalance}
-              />
-            </td>
-            <td className="p-2">
-              <SelectField<AccountType>
-                options={Object.values(AccountType)}
-                value={type}
-                onChange={(e) => setType(e.target.value as AccountType)}
-                labelFn={(t) => t}
-              />
-            </td>
+            <AccountCells
+              setBalance={setBalance}
+              setName={setName}
+              setType={setType}
+              balance={balance}
+              name={name}
+              type={type}
+            />
             <td className="p-2">
               <div className="w-fit mx-auto">
                 <Button

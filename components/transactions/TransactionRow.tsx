@@ -11,7 +11,7 @@ import { InputField } from "../ui-kit/InputField";
 import { Button } from "../ui-kit/Button";
 import { CurrencyField } from "../ui-kit/CurrencyField";
 
-import { CategoryDropdown } from "../CategoryDropdown";
+import { CategoryDropdown } from "../category/CategoryDropdown";
 import { TransactionCell } from "./TransactionCell";
 
 export const TransactionRow = ({
@@ -37,8 +37,6 @@ export const TransactionRow = ({
   const [outflow, setOutflow] = useState<number | undefined>(
     transaction.outflow,
   );
-
-  console.log(transaction);
 
   useEffect(() => {
     setCat(transaction.category ?? null);
@@ -74,10 +72,7 @@ export const TransactionRow = ({
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as typeof patch;
 
-      const updated = await editTransaction({
-        patch: cleanedPatch,
-        oldAccountID: transaction.account_id,
-      });
+      const updated = await editTransaction(cleanedPatch);
 
       setCat(updated.category ?? null);
       setDate(updated.date);
@@ -123,7 +118,7 @@ export const TransactionRow = ({
           name="inflow"
           value={inflow}
           variant="grid"
-          setValue={setInflow}
+          setValue={(v) => setInflow(v)}
         />
       </TransactionCell>
       <TransactionCell>
@@ -131,7 +126,7 @@ export const TransactionRow = ({
           name="outflow"
           value={outflow}
           variant="grid"
-          setValue={setOutflow}
+          setValue={(v) => setOutflow(v)}
         />
       </TransactionCell>
       {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}

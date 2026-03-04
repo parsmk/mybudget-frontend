@@ -1,7 +1,7 @@
 import { useCategories } from "@/hooks/categories/useCategories";
-import { SelectField } from "./ui-kit/SelectField";
+import { SelectField } from "../ui-kit/SelectField";
 import { Category } from "@/api/category";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 type CategoryDropdownProps = {
   value: Category | null;

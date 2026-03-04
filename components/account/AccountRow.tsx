@@ -1,18 +1,16 @@
 import { Account, AccountType } from "@/api/account";
-import { InputField } from "../ui-kit/InputField";
-import { SelectField } from "../ui-kit/SelectField";
 import { Button } from "../ui-kit/Button";
 import { useMemo, useState } from "react";
 import { useEditAccount } from "@/hooks/accounts/useEditAccount";
 import { useDeleteAccount } from "@/hooks/accounts/useDeleteAccount";
-import { CurrencyField } from "../ui-kit/CurrencyField";
+import { AccountCells } from "./AccountCells";
 
 export const AccountRow = ({ account }: { account: Account }) => {
   const { mutateAsync: editAccount } = useEditAccount();
   const { mutate: deleteAccount } = useDeleteAccount();
 
   const [name, setName] = useState<string>(account.name);
-  const [balance, setBalance] = useState<number | undefined>(account.balance);
+  const [balance, setBalance] = useState<number>(account.balance);
   const [type, setType] = useState<AccountType>(account.type);
   const [edit, setEdit] = useState<boolean>(false);
 
@@ -37,35 +35,15 @@ export const AccountRow = ({ account }: { account: Account }) => {
 
   return (
     <>
-      <td>
-        <InputField
-          name="name"
-          type="text"
-          variant="grid"
-          state={edit ? "default" : "display"}
-          value={name}
-          placeholder="account title..."
-          onChange={(e) => setName(e.currentTarget.value)}
-        />
-      </td>
-      <td>
-        <CurrencyField
-          name="balance"
-          state={edit ? "default" : "display"}
-          variant="grid"
-          value={balance}
-          setValue={setBalance}
-        />
-      </td>
-      <td className="p-2">
-        <SelectField
-          disabled={!edit}
-          options={Object.values(AccountType)}
-          value={type}
-          onChange={(e) => setType(e.target.value as AccountType)}
-          labelFn={(t) => t}
-        />
-      </td>
+      <AccountCells
+        name={name}
+        balance={balance}
+        type={type}
+        setName={setName}
+        setBalance={setBalance}
+        setType={setType}
+        disabled={!edit}
+      />
       <td className="p-2 flex items-center h-full w-full justify-around">
         <Button
           size="sm"
@@ -83,9 +61,9 @@ export const AccountRow = ({ account }: { account: Account }) => {
         <Button
           size="sm"
           variant="danger"
-          onClick={() => deleteAccount(account.id)}
+          onClick={() => (edit ? setEdit(!edit) : deleteAccount(account.id))}
         >
-          Delete
+          {edit ? "Cancel" : "Delete"}
         </Button>
       </td>
     </>

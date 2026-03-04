@@ -60,10 +60,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     }
 
     try {
-      const { errors } = await createTransactions({
-        data: transactions,
-        accountID,
-      });
+      const { errors } = await createTransactions(transactions);
       if (errors.count === 0) close();
       console.log();
       handler.handle(errors.items);

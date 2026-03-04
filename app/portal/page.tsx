@@ -1,8 +1,8 @@
 "use client";
 
-import { AccountsCard } from "@/components/dashboard/AccountsCard";
-import { CategoriesCard } from "@/components/dashboard/CategoriesCard";
-import { DashboardCard } from "@/components/dashboard/DashboardCard";
+import { AccountsCard } from "@/components/account/AccountsCard";
+import { CategoriesCard } from "@/components/category/CategoriesCard";
+import { DashboardCard } from "@/components/DashboardCard";
 import { useAccounts } from "@/hooks/accounts/useAccounts";
 import { useCategories } from "@/hooks/categories/useCategories";
 

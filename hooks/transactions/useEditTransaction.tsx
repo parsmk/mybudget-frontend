@@ -7,13 +7,7 @@ export const useEditTransaction = () => {
   const apiClient = useApiClient();
 
   return useMutation({
-    mutationFn: ({
-      patch,
-      oldAccountID,
-    }: {
-      patch: EditTransactionRequest;
-      oldAccountID: string;
-    }) => {
+    mutationFn: (patch: EditTransactionRequest) => {
       return apiClient.editTransaction(patch);
     },
     onSuccess: (data, variables, onMutateResult, context) => {

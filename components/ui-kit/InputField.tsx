@@ -2,8 +2,6 @@ import React, { forwardRef } from "react";
 
 export type InputFieldTypes = "text" | "password" | "date" | "number";
 
-export type InputFieldStates = "default" | "disabled" | "display";
-
 export type InputFieldVariants = "default" | "grid";
 
 type InputFieldProps = {
@@ -11,7 +9,6 @@ type InputFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
-  state?: InputFieldStates;
   value?: string | number;
   variant?: InputFieldVariants;
   defaultValue?: string;
@@ -33,7 +30,6 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       name,
       label,
       placeholder,
-      state = "default",
       value,
       defaultValue,
       variant = "default",
@@ -49,16 +45,15 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     },
     ref,
   ) => {
-    const stateClasses: Record<InputFieldStates, string> = {
-      disabled: "cursor-disabled pointer-events-none",
-      display: "cursor-default pointer-events-none",
-      default: "",
+    const variantClasses: Record<InputFieldVariants, string> = {
+      default: "border-foreground/20",
+      grid: "text-foreground/75 border-foreground/0",
     };
 
-    const variantClasses: Record<InputFieldVariants, string> = {
+    const variantInteractivity: Record<InputFieldVariants, string> = {
       default:
-        "border-foreground/20 hover:border-foreground/50 hover:text-foreground focus:text-foreground",
-      grid: "text-foreground/75 border-foreground/0 hover:border-foreground/50",
+        "hover:border-foreground/50 hover:text-foreground focus:text-foreground",
+      grid: "hover:border-foreground/50",
     };
 
     const adornmentClasses = `${value ? "opacity-100" : "opacity-50"}`;
@@ -72,7 +67,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           </label>
         )}
         <div
-          className={`${stateClasses[state]} ${variantClasses[variant]}
+          className={`${variantClasses[variant]} ${disabled ? "" : variantInteractivity[variant]}
             border-1 p-2 rounded-md w-full flex dark:[color-scheme:dark]
             transition focus-within:border-foreground/50 focus-within:text-foreground hover:text-foreground
           `}
