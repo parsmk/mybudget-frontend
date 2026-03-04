@@ -30,9 +30,17 @@ export const TransactionTable = ({
     useDeleteTransactions();
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [edits, setEdits] = useState<Map<string, Partial<Transaction>>>(
+    new Map(transactions.map((t) => [t.id, {}])),
+  );
   const [orderBy, setOrderBy] = useState<
     [h: TransactionHeadings, state: SortState]
   >(["Date", "desc"]);
+
+  const hasAnyEdits = useMemo(
+    () => Array.from(edits.values()).some((e) => Object.keys(e).length > 0),
+    [edits],
+  );
 
   const orderedTransactions = useMemo(() => {
     const [heading, state] = orderBy;
@@ -53,8 +61,8 @@ export const TransactionTable = ({
         case "Category":
           return (
             dir *
-            String(a.category ?? "").localeCompare(
-              String(b.category ?? ""),
+            String(a.category?.name ?? "zzz").localeCompare(
+              String(b.category?.name ?? "zzz"),
               undefined,
               { sensitivity: "base" },
             )
@@ -84,18 +92,16 @@ export const TransactionTable = ({
     try {
       await deleteTransactions(Array.from(selected));
       setSelected(new Set());
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {}
   };
 
   return (
-    <table className="w-full text-justify">
+    <table className="w-full text-justify table-fixed">
       <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0 z-10">
         <tr>
-          <th>
+          <TransactionHeader isFilter={false}>
             <input
-              className="mx-auto w-full h-full"
+              className="mx-auto w-full"
               type="checkbox"
               checked={
                 selected.size === transactions.length && transactions.length > 0
@@ -106,7 +112,7 @@ export const TransactionTable = ({
                 else setSelected(new Set(transactions.map((t) => t.id)));
               }}
             />
-          </th>
+          </TransactionHeader>
           {TRANSACTION_HEADINGS.map((h, i) => {
             const state = orderBy[0] === h ? orderBy[1] : "none";
             if (!showAccount && h === "Account") return;
@@ -135,6 +141,11 @@ export const TransactionTable = ({
                 Delete
               </Button>
             )}
+            {hasAnyEdits && (
+              <Button type="button" variant="primary" size="sm" fullWidth>
+                Save Changes
+              </Button>
+            )}
           </th>
         </tr>
       </thead>
@@ -147,6 +158,21 @@ export const TransactionTable = ({
               key={t.id}
               transaction={t}
               showAccount={showAccount}
+              edits={edits.get(t.id) ?? {}}
+              set={(k, v) =>
+                setEdits((prev) => {
+                  const next = new Map(prev);
+                  const { [k]: _, ...rest } = prev.get(t.id) ?? {};
+
+                  if (JSON.stringify(t[k]) === JSON.stringify(v)) {
+                    next.set(t.id, rest);
+                  } else {
+                    next.set(t.id, { ...rest, [k]: v });
+                  }
+
+                  return next;
+                })
+              }
             />
           ))}
       </tbody>

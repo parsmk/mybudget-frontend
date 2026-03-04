@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Transaction } from "@/api/transaction";
 
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
@@ -18,6 +16,8 @@ type TransactionRowProps = {
   selected: boolean;
   setSelected: (id: string) => void;
   showAccount?: boolean;
+  edits: Partial<Transaction>;
+  set: <K extends keyof Transaction>(key: K, value: Transaction[K]) => void;
 };
 
 export const TransactionRow = ({
@@ -25,21 +25,17 @@ export const TransactionRow = ({
   selected = false,
   setSelected,
   showAccount = false,
+  edits,
+  set,
 }: TransactionRowProps) => {
   const { data: account } = useAccount(transaction.account_id);
   const { mutateAsync: editTransaction, isPending: editing } =
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
-  const [edits, setEdits] = useState<Partial<Transaction>>({});
   const hasChanged = Object.keys(edits).length > 0;
-
   const get = <K extends keyof Transaction>(key: K) =>
     edits[key] ?? transaction[key];
-  const set = <K extends keyof Transaction>(
-    key: K,
-    value: (typeof transaction)[K],
-  ) => setEdits((prev) => ({ ...prev, [key]: value }));
 
   const handleSubmit = async () => {
     try {
@@ -48,7 +44,6 @@ export const TransactionRow = ({
         id: transaction.id,
         category_id: edits["category"]?.id,
       });
-      setEdits({});
     } catch (err) {}
   };
 
@@ -69,6 +64,7 @@ export const TransactionRow = ({
           value={get("date")}
           variant="grid"
           onChange={(e) => set("date", e.currentTarget.value)}
+          onKeyEnter={(e) => set("date", e.currentTarget.value)}
         />
       </TransactionCell>
       <TransactionCell>
