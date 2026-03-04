@@ -1,7 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-
-import { EditTransactionRequest, Transaction } from "@/api/transaction";
-import { Category } from "@/api/category";
+import { Transaction } from "@/api/transaction";
 
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
@@ -14,71 +11,39 @@ import { CurrencyField } from "../ui-kit/CurrencyField";
 import { CategoryDropdown } from "../category/CategoryDropdown";
 import { TransactionCell } from "./TransactionCell";
 
+type TransactionRowProps = {
+  transaction: Transaction;
+  selected: boolean;
+  setSelected: (id: string) => void;
+  showAccount?: boolean;
+  edits: Partial<Transaction>;
+  set: <K extends keyof Transaction>(key: K, value: Transaction[K]) => void;
+};
+
 export const TransactionRow = ({
   transaction,
   selected = false,
   setSelected,
   showAccount = false,
-}: {
-  transaction: Transaction;
-  selected: boolean;
-  setSelected: (id: string) => void;
-  showAccount?: boolean;
-}) => {
+  edits,
+  set,
+}: TransactionRowProps) => {
   const { data: account } = useAccount(transaction.account_id);
   const { mutateAsync: editTransaction, isPending: editing } =
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
-  const [cat, setCat] = useState<Category | null>(transaction.category ?? null);
-  const [date, setDate] = useState<string>(transaction.date);
-  const [payee, setPayee] = useState<string>(transaction.payee);
-  const [inflow, setInflow] = useState<number | undefined>(transaction.inflow);
-  const [outflow, setOutflow] = useState<number | undefined>(
-    transaction.outflow,
-  );
-
-  useEffect(() => {
-    setCat(transaction.category ?? null);
-    setDate(transaction.date);
-    setPayee(transaction.payee);
-    setInflow(transaction.inflow);
-    setOutflow(transaction.outflow);
-  }, [transaction]);
-
-  const hasChanged = useMemo(() => {
-    if (cat?.id !== transaction.category?.id) return true;
-    if (date !== transaction.date) return true;
-    if (payee !== transaction.payee) return true;
-    if (inflow !== transaction.inflow) return true;
-    if (outflow !== transaction.outflow) return true;
-
-    return false;
-  }, [cat, date, payee, inflow, outflow, transaction]);
+  const hasChanged = Object.keys(edits).length > 0;
+  const get = <K extends keyof Transaction>(key: K) =>
+    edits[key] ?? transaction[key];
 
   const handleSubmit = async () => {
     try {
-      const patch: EditTransactionRequest = {
+      await editTransaction({
+        ...edits,
         id: transaction.id,
-        category_id:
-          cat?.id === transaction.category?.id ? undefined : (cat?.id ?? null),
-        date: date === transaction.date ? undefined : date,
-        payee: payee === transaction.payee ? undefined : payee,
-        inflow: inflow === transaction.inflow ? undefined : inflow,
-        outflow: outflow === transaction.outflow ? undefined : outflow,
-      };
-
-      const cleanedPatch = Object.fromEntries(
-        Object.entries(patch).filter(([, v]) => v !== undefined),
-      ) as typeof patch;
-
-      const updated = await editTransaction(cleanedPatch);
-
-      setCat(updated.category ?? null);
-      setDate(updated.date);
-      setPayee(updated.payee);
-      setInflow(updated.inflow);
-      setOutflow(updated.outflow);
+        category_id: edits["category"]?.id,
+      });
     } catch (err) {}
   };
 
@@ -96,37 +61,41 @@ export const TransactionRow = ({
         <InputField
           type="date"
           name="date"
-          value={date}
+          value={get("date")}
           variant="grid"
-          onChange={(e) => setDate(e.currentTarget.value)}
+          onChange={(e) => set("date", e.currentTarget.value)}
+          onKeyEnter={(e) => set("date", e.currentTarget.value)}
         />
       </TransactionCell>
       <TransactionCell>
         <InputField
           type="text"
           name="payee"
-          value={payee}
+          value={get("payee")}
           variant="grid"
-          onChange={(e) => setPayee(e.currentTarget.value)}
+          onChange={(e) => set("payee", e.currentTarget.value)}
         />
       </TransactionCell>
       <TransactionCell>
-        <CategoryDropdown setValue={setCat} value={cat} />
+        <CategoryDropdown
+          setValue={(cat) => set("category", cat ?? undefined)}
+          value={get("category") ?? null}
+        />
       </TransactionCell>
       <TransactionCell>
         <CurrencyField
           name="inflow"
-          value={inflow}
+          value={get("inflow")}
           variant="grid"
-          setValue={(v) => setInflow(v)}
+          setValue={(val) => set("inflow", val)}
         />
       </TransactionCell>
       <TransactionCell>
         <CurrencyField
           name="outflow"
-          value={outflow}
+          value={get("outflow")}
           variant="grid"
-          setValue={(v) => setOutflow(v)}
+          setValue={(val) => set("outflow", val)}
         />
       </TransactionCell>
       {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}

@@ -1,4 +1,4 @@
-export type CreateObjectResponse<T> = {
+export type BulkResponse<T> = {
   errors: {
     count: number;
     items: { index: string; errors: ErrorResponse }[];

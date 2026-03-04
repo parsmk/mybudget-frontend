@@ -62,7 +62,6 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
     try {
       const { errors } = await createTransactions(transactions);
       if (errors.count === 0) close();
-      console.log();
       handler.handle(errors.items);
     } catch (error) {
       if (error instanceof Error) handler.addGeneralError(error.message);
