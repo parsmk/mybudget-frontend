@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 export type InputFieldTypes = "text" | "password" | "date" | "number";
 
@@ -18,9 +18,10 @@ type InputFieldProps = {
   leftAdornment?: React.ReactNode;
   rightAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onKeyEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyEscape?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
@@ -39,9 +40,10 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       leftAdornment,
       rightAdornment,
       onChange,
-      onKeyDown,
       onBlur,
       onFocus,
+      onKeyEnter,
+      onKeyEscape,
     },
     ref,
   ) => {
@@ -83,7 +85,15 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             disabled={disabled}
             required={required}
             onChange={onChange}
-            onKeyDown={onKeyDown}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                onKeyEnter?.(e);
+                e.currentTarget.blur();
+              } else if (e.key === "Escape") {
+                onKeyEscape?.(e);
+                e.currentTarget.blur();
+              }
+            }}
             onBlur={onBlur}
             onFocus={onFocus}
             className="grow focus:outline-none"

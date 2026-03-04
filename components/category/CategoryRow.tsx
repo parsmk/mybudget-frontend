@@ -39,16 +39,13 @@ export const CategoryRow = ({ category }: { category: Category }) => {
         disabled={!edit}
         name={category.id}
         onChange={(e) => setCat(e.currentTarget.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleEdit();
-            e.currentTarget.blur();
-            setEdit(false);
-          } else if (e.key === "Escape") {
-            setEdit(false);
-            setCat(category.name);
-            e.currentTarget.blur();
-          }
+        onKeyEnter={() => {
+          handleEdit();
+          setEdit(false);
+        }}
+        onKeyEscape={() => {
+          setEdit(false);
+          setCat(category.name);
         }}
         onBlur={() => setEdit(false)}
         value={cat}
