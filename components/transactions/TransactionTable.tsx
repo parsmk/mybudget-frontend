@@ -1,11 +1,13 @@
 "use client";
 
-import { Transaction } from "@/api/transaction";
+import { EditTransactionRequest, Transaction } from "@/api/transaction";
 import { TransactionRow } from "./TransactionRow";
 import { useMemo, useState } from "react";
 import { Button } from "../ui-kit/Button";
 import { useDeleteTransactions } from "@/hooks/transactions/useDeleteTransactions";
 import { SortState, TransactionHeader } from "./TransactionHeader";
+import { useEditAccountTransactions } from "@/hooks/transactions/useEditAccountTransactions";
+import { useBulkAPIErrorHandler } from "@/hooks/useBulkAPIErrorHandler";
 
 export const TRANSACTION_HEADINGS = [
   "Date",
@@ -28,6 +30,8 @@ export const TransactionTable = ({
 }: TransactionTableProps) => {
   const { mutateAsync: deleteTransactions, isPending: deleting } =
     useDeleteTransactions();
+  const { mutateAsync: editTransactions, isPending: editing } =
+    useEditAccountTransactions();
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [edits, setEdits] = useState<Map<string, Partial<Transaction>>>(
@@ -37,10 +41,12 @@ export const TransactionTable = ({
     [h: TransactionHeadings, state: SortState]
   >(["Date", "desc"]);
 
-  const hasAnyEdits = useMemo(
-    () => Array.from(edits.values()).some((e) => Object.keys(e).length > 0),
-    [edits],
-  );
+  const { generalErrors, itemErrors, commonErrors, handler } =
+    useBulkAPIErrorHandler();
+
+  const hasAnyEdits = useMemo(() => {
+    return Array.from(edits.values()).some((e) => Object.keys(e).length > 0);
+  }, [edits]);
 
   const orderedTransactions = useMemo(() => {
     const [heading, state] = orderBy;
@@ -95,6 +101,33 @@ export const TransactionTable = ({
     } catch (err) {}
   };
 
+  const handleEdit = async () => {
+    try {
+      const data: EditTransactionRequest[] = [];
+      for (const [id, dp] of edits.entries()) {
+        if (Object.keys(dp).length > 0) {
+          const { category, id: _, ...rest } = dp;
+          data.push({
+            ...rest,
+            category_id: category?.id ?? undefined,
+            id,
+          });
+        }
+      }
+      const { errors } = await editTransactions({
+        accountID: transactions[0].account_id,
+        data,
+      });
+      if (errors.count > 0) return handler.handle(errors.items);
+      setEdits(new Map(transactions.map((t) => [t.id, {}])));
+    } catch (err) {
+      if (err instanceof Error) {
+        handler.addGeneralError(err.message);
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <table className="w-full text-justify table-fixed">
       <thead className="sticky border-b border-foreground/75 bg-primary/95 top-0 z-10">
@@ -142,7 +175,14 @@ export const TransactionTable = ({
               </Button>
             )}
             {hasAnyEdits && (
-              <Button type="button" variant="primary" size="sm" fullWidth>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={() => handleEdit()}
+                disabled={editing}
+                fullWidth
+              >
                 Save Changes
               </Button>
             )}
