@@ -10,7 +10,7 @@ import {
   Transaction,
   TransactionFilters,
 } from "./transaction";
-import { CreateObjectResponse, ErrorResponse } from "./responses";
+import { BulkResponse, ErrorResponse } from "./responses";
 import { LoginRequest, SignupRequest } from "./user";
 
 export class APIClientError extends Error {
@@ -62,7 +62,7 @@ export class APIClient {
 
   // CATEGORIES
   public async createAccount(data: CreateAccountRequest) {
-    return this.request<CreateObjectResponse<Account>>("account/", {
+    return this.request<Account>("account/", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -108,7 +108,7 @@ export class APIClient {
 
   // TRANSACTIONS
   public async createTransactions(data: CreateTransactionRequest[]) {
-    return this.request<CreateObjectResponse<Transaction>>("transaction/bulk", {
+    return this.request<BulkResponse<Transaction>>("transaction/bulk", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -128,12 +128,19 @@ export class APIClient {
     });
   }
 
+  public async editTransactions(data: EditTransactionRequest[]) {
+    return this.request<BulkResponse<Transaction>>(`transaction/bulk`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
   public async deleteTransaction(id: string) {
     return this.request<Transaction>(`transaction/${id}`, { method: "DELETE" });
   }
 
   public async deleteTransactions(ids: string[]) {
-    return this.request<Transaction[]>(`transaction/`, {
+    return this.request<Transaction[]>(`transaction/bulk`, {
       method: "DELETE",
       body: JSON.stringify(ids),
     });
@@ -142,7 +149,7 @@ export class APIClient {
 
   // CATEGORIES
   public async createCategory(data: CreateCategoryRequest) {
-    return this.request<CreateObjectResponse<Category>>("category/", {
+    return this.request<Category>("category/", {
       method: "POST",
       body: JSON.stringify(data),
     });
