@@ -81,7 +81,7 @@ export const TransactionRow = ({
       </TransactionCell>
       <TransactionCell>
         <CategoryDropdown
-          setValue={(cat) => set("category", cat ?? null)}
+          setValue={(cat) => set("category", cat)}
           value={get("category") ?? null}
         />
       </TransactionCell>

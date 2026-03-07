@@ -113,7 +113,7 @@ export const TransactionTable = ({
           const { category, ...rest } = dp;
           data.push({
             ...rest,
-            category_id: category?.id ?? null,
+            category_id: category?.id,
             id,
           });
         }
@@ -124,7 +124,6 @@ export const TransactionTable = ({
     } catch (err) {
       if (err instanceof Error) {
         handler.addGeneralError(err.message);
-        console.log(err);
       }
     }
   };

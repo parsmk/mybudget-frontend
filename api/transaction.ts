@@ -37,7 +37,7 @@ export type TransactionFilters = {
 export type TransactionForm = {
   date: string;
   payee: string;
-  category: Category | null;
+  category?: Category | null;
   account_id: string;
   inflow?: number;
   outflow?: number;
