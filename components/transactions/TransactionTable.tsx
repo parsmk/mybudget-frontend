@@ -1,6 +1,10 @@
 "use client";
 
-import { EditTransactionRequest, Transaction } from "@/api/transaction";
+import {
+  EditTransactionRequest,
+  Transaction,
+  TransactionForm,
+} from "@/api/transaction";
 import { TransactionRow } from "./TransactionRow";
 import { useMemo, useState } from "react";
 import { Button } from "../ui-kit/Button";
@@ -34,7 +38,7 @@ export const TransactionTable = ({
     useEditAccountTransactions();
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [edits, setEdits] = useState<Map<string, Partial<Transaction>>>(
+  const [edits, setEdits] = useState<Map<string, Partial<TransactionForm>>>(
     new Map(transactions.map((t) => [t.id, {}])),
   );
   const [orderBy, setOrderBy] = useState<
@@ -106,12 +110,13 @@ export const TransactionTable = ({
       const data: EditTransactionRequest[] = [];
       for (const [id, dp] of edits.entries()) {
         if (Object.keys(dp).length > 0) {
-          const { category, id: _, ...rest } = dp;
+          const { category, ...rest } = dp;
           data.push({
             ...rest,
-            category_id: category?.id ?? undefined,
+            category_id: category?.id ?? null,
             id,
           });
+          console.log(data.at(data.length - 1));
         }
       }
       const { errors } = await editTransactions({

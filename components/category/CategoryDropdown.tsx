@@ -4,7 +4,7 @@ import { Category } from "@/api/category";
 
 type CategoryDropdownProps = {
   value: Category | null;
-  setValue: (cat: Category | null) => void;
+  setValue: (cat: Category | undefined) => void;
 };
 
 export const CategoryDropdown = ({
@@ -26,7 +26,7 @@ export const CategoryDropdown = ({
       }}
       onChange={(e) => {
         const val = categories?.find((c) => c.id === e.currentTarget.value);
-        setValue(val ?? null);
+        setValue(val);
       }}
       options={categories ?? []}
       defaultOption={"uncategorized"}

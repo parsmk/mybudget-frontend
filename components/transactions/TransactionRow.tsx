@@ -1,4 +1,4 @@
-import { Transaction } from "@/api/transaction";
+import { Transaction, TransactionForm } from "@/api/transaction";
 
 import { useEditTransaction } from "@/hooks/transactions/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/transactions/useDeleteTransaction";
@@ -16,8 +16,11 @@ type TransactionRowProps = {
   selected: boolean;
   setSelected: (id: string) => void;
   showAccount?: boolean;
-  edits: Partial<Transaction>;
-  set: <K extends keyof Transaction>(key: K, value: Transaction[K]) => void;
+  edits: Partial<TransactionForm>;
+  set: <K extends keyof TransactionForm>(
+    key: K,
+    value: TransactionForm[K],
+  ) => void;
 };
 
 export const TransactionRow = ({
@@ -34,7 +37,7 @@ export const TransactionRow = ({
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
   const hasChanged = Object.keys(edits).length > 0;
-  const get = <K extends keyof Transaction>(key: K) =>
+  const get = <K extends keyof TransactionForm>(key: K) =>
     edits[key] ?? transaction[key];
 
   const handleSubmit = async () => {
@@ -78,7 +81,7 @@ export const TransactionRow = ({
       </TransactionCell>
       <TransactionCell>
         <CategoryDropdown
-          setValue={(cat) => set("category", cat ?? undefined)}
+          setValue={(cat) => set("category", cat ?? null)}
           value={get("category") ?? null}
         />
       </TransactionCell>

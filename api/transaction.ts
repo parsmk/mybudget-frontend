@@ -33,3 +33,12 @@ export type TransactionFilters = {
   from?: string;
   to?: string;
 };
+
+export type TransactionForm = {
+  date: string;
+  payee: string;
+  category: Category | null;
+  account_id: string;
+  inflow?: number;
+  outflow?: number;
+};
