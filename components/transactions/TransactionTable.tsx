@@ -116,13 +116,9 @@ export const TransactionTable = ({
             category_id: category?.id ?? null,
             id,
           });
-          console.log(data.at(data.length - 1));
         }
       }
-      const { errors } = await editTransactions({
-        accountID: transactions[0].account_id,
-        data,
-      });
+      const { errors } = await editTransactions(data);
       if (errors.count > 0) return handler.handle(errors.items);
       setEdits(new Map(transactions.map((t) => [t.id, {}])));
     } catch (err) {

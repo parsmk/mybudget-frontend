@@ -7,14 +7,8 @@ export const useEditAccountTransactions = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      accountID,
-      data,
-    }: {
-      accountID: string;
-      data: EditTransactionRequest[];
-    }) => {
-      return apiClient.editAccountTransactions(accountID, data);
+    mutationFn: (data: EditTransactionRequest[]) => {
+      return apiClient.editTransactions(data);
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });

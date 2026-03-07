@@ -101,19 +101,6 @@ export class APIClient {
     });
   }
 
-  public async editAccountTransactions(
-    id: string,
-    data: EditTransactionRequest[],
-  ) {
-    return this.request<BulkResponse<Transaction>>(
-      `account/${id}/transactions`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      },
-    );
-  }
-
   public async deleteAccount(id: string) {
     return this.request<Account>(`account/${id}`, { method: "DELETE" });
   }
@@ -131,6 +118,13 @@ export class APIClient {
     const _params = params ? new URLSearchParams(params) : "";
     return this.request<Transaction[]>(`transaction?${_params}`, {
       method: "GET",
+    });
+  }
+
+  public async editTransactions(data: EditTransactionRequest[]) {
+    return this.request<BulkResponse<Transaction>>(`transaction/bulk`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
     });
   }
 
