@@ -49,7 +49,7 @@ export const TransactionTable = ({
     useBulkAPIErrorHandler();
 
   const hasAnyEdits = useMemo(() => {
-    return Array.from(edits.values()).some((e) => Object.keys(e).length > 1);
+    return Array.from(edits.values()).some((e) => Object.keys(e).length > 0);
   }, [edits]);
 
   const orderedTransactions = useMemo(() => {
