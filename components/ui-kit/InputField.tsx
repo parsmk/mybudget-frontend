@@ -1,4 +1,6 @@
-import { forwardRef } from "react";
+import { forwardRef, useRef, useState } from "react";
+import { Danger } from "../svgs/Danger";
+import { Tooltip } from "./Tooltip";
 
 export type InputFieldTypes = "text" | "password" | "date" | "number";
 
@@ -47,6 +49,9 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     },
     ref,
   ) => {
+    const [errsOpen, setErrsOpen] = useState<boolean>(false);
+    const errorIcon = useRef<SVGSVGElement | null>(null);
+
     const variantClasses: Record<InputFieldVariants, string> = {
       default: "border-foreground/20",
       grid: "text-foreground/75 border-foreground/0",
@@ -74,7 +79,9 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             transition focus-within:border-foreground/50 focus-within:text-foreground hover:text-foreground
           `}
         >
-          {<div className={adornmentClasses}>{leftAdornment}</div>}
+          {leftAdornment && (
+            <div className={adornmentClasses}>{leftAdornment}</div>
+          )}
           <input
             ref={ref}
             type={type}
@@ -96,17 +103,25 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             }}
             onBlur={onBlur}
             onFocus={onFocus}
-            className="grow focus:outline-none"
+            className="grow focus:outline-none "
           />
-          {<div className={adornmentClasses}>{rightAdornment}</div>}
+          {rightAdornment && (
+            <div className={adornmentClasses}>{rightAdornment}</div>
+          )}
+          {
+            <div className="ml-1">
+              <Danger
+                ref={errorIcon}
+                className={`text-danger size-5 ${errors && errors.length > 0 ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                onMouseEnter={() => setErrsOpen(true)}
+                onMouseLeave={() => setErrsOpen(false)}
+              />
+              <Tooltip target={errorIcon} open={errsOpen} variant="danger">
+                {errors}
+              </Tooltip>
+            </div>
+          }
         </div>
-        {errors &&
-          errors.length > 0 &&
-          errors.map((err, i) => (
-            <p key={i} className="text-danger">
-              {err}
-            </p>
-          ))}
       </div>
     );
   },
