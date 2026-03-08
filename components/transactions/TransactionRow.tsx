@@ -10,6 +10,10 @@ import { CurrencyField } from "../ui-kit/CurrencyField";
 
 import { CategoryDropdown } from "../category/CategoryDropdown";
 import { TransactionCell } from "./TransactionCell";
+import { useErrorHandler } from "@/hooks/useErrorHandler";
+import { ErrorTooltip } from "../ui-kit/ErrorTooltip";
+import { SaveIcon } from "../svgs/SaveIcon";
+import { TrashIcon } from "../svgs/TrashIcon";
 
 type TransactionRowProps = {
   transaction: Transaction;
@@ -38,12 +42,15 @@ export const TransactionRow = ({
     useEditTransaction();
   const { mutate: deleteTransaction } = useDeleteTransaction();
 
+  const { formErrors, fieldErrors, handler } = useErrorHandler();
+
   const hasChanged = Object.keys(edits).length > 0;
   const get = <K extends keyof TransactionForm>(key: K) =>
     key in edits ? edits[key] : transaction[key];
 
   const handleSubmit = async () => {
     try {
+      clearEdits();
       await editTransaction({
         ...edits,
         id: transaction.id,
@@ -52,8 +59,9 @@ export const TransactionRow = ({
             ? undefined
             : (edits["category"]?.id ?? null),
       });
-      clearEdits();
-    } catch (err) {}
+    } catch (err) {
+      handler.handle(err);
+    }
   };
 
   return (
@@ -74,6 +82,7 @@ export const TransactionRow = ({
           variant="grid"
           onChange={(e) => set("date", e.currentTarget.value)}
           onKeyEnter={(e) => set("date", e.currentTarget.value)}
+          errors={fieldErrors["date"]}
         />
       </TransactionCell>
       <TransactionCell>
@@ -83,6 +92,7 @@ export const TransactionRow = ({
           value={get("payee")}
           variant="grid"
           onChange={(e) => set("payee", e.currentTarget.value)}
+          errors={fieldErrors["payee"]}
         />
       </TransactionCell>
       <TransactionCell>
@@ -97,6 +107,7 @@ export const TransactionRow = ({
           value={get("inflow")}
           variant="grid"
           setValue={(val) => set("inflow", val)}
+          errors={fieldErrors["inflow"]}
         />
       </TransactionCell>
       <TransactionCell>
@@ -105,29 +116,21 @@ export const TransactionRow = ({
           value={get("outflow")}
           variant="grid"
           setValue={(val) => set("outflow", val)}
+          errors={fieldErrors["outflow"]}
         />
       </TransactionCell>
       {showAccount ? <TransactionCell>{account?.name}</TransactionCell> : null}
       <TransactionCell>
         <div className="h-full w-full flex items-center justify-center gap-2">
-          <Button
-            type="button"
-            size="sm"
-            disabled={!hasChanged || editing}
+          <ErrorTooltip errors={formErrors} />
+          <SaveIcon
+            className={`text-primary/50 ${hasChanged ? "hover:text-primary cursor-pointer" : "cursor-not-allowed"} size-5`}
             onClick={async () => await handleSubmit()}
-            fullWidth
-          >
-            Save
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant="danger"
+          />
+          <TrashIcon
+            className="text-foreground/50 hover:text-foreground size-5"
             onClick={() => deleteTransaction(transaction.id)}
-            fullWidth
-          >
-            Delete
-          </Button>
+          />
         </div>
       </TransactionCell>
     </tr>
