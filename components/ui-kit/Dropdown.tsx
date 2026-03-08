@@ -15,7 +15,7 @@ export const Dropdown = ({ children, target, open = false }: DropdownProps) => {
   return createPortal(
     <div
       style={{ top: pos ? pos.bottom + 2 : 0, left: pos?.left }}
-      className={`${open ? "block" : "hidden"} absolute bg-secondary rounded-md divide-y divide-tertiary border-1 border-tertiary`}
+      className={`fixed bg-secondary rounded-md divide-y divide-tertiary border-1 border-tertiary`}
     >
       {children}
     </div>,

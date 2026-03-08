@@ -3,17 +3,19 @@ import { DownChevron, RightChevron, UpChevron } from "../svgs/Chevrons";
 
 export type SortState = "none" | "asc" | "desc";
 
+type TransactionHeaderProps = {
+  children?: React.ReactNode;
+  isFilter?: boolean;
+  sortState?: SortState;
+  setSortState?: (s: SortState) => void;
+};
+
 export const TransactionHeader = ({
   children,
   isFilter = true,
   sortState = "none",
   setSortState,
-}: {
-  children?: React.ReactNode;
-  isFilter?: boolean;
-  sortState?: SortState;
-  setSortState?: (s: SortState) => void;
-}) => {
+}: TransactionHeaderProps) => {
   let chevron: React.ReactNode = null;
   const chevronClasses = "size-5 self-center";
 
