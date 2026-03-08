@@ -1,6 +1,6 @@
-import React from "react";
-
 export type SVGProps = {
   className?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: React.MouseEventHandler;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
 };
