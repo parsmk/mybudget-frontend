@@ -27,12 +27,12 @@ export const SelectField = <T,>({
   return (
     <select
       className={`w-full h-full rounded-md focus:outline-none focus:ring-none ${variantClasses}`}
-      value={value ? idFn(value) : "none"}
+      value={value ? idFn(value) : "default"}
       onChange={(e) => onChange?.(e)}
       disabled={disabled}
     >
       {defaultOption ? (
-        <option value={"none"} className={optionClasses}>
+        <option value={"default"} className={optionClasses}>
           {defaultOption}
         </option>
       ) : null}

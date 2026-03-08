@@ -21,6 +21,7 @@ type TransactionRowProps = {
     key: K,
     value: TransactionForm[K],
   ) => void;
+  clearEdits: () => void;
 };
 
 export const TransactionRow = ({
@@ -30,6 +31,7 @@ export const TransactionRow = ({
   showAccount = false,
   edits,
   set,
+  clearEdits,
 }: TransactionRowProps) => {
   const { data: account } = useAccount(transaction.account_id);
   const { mutateAsync: editTransaction, isPending: editing } =
@@ -38,15 +40,19 @@ export const TransactionRow = ({
 
   const hasChanged = Object.keys(edits).length > 0;
   const get = <K extends keyof TransactionForm>(key: K) =>
-    edits[key] ?? transaction[key];
+    key in edits ? edits[key] : transaction[key];
 
   const handleSubmit = async () => {
     try {
       await editTransaction({
         ...edits,
         id: transaction.id,
-        category_id: edits["category"]?.id,
+        category_id:
+          edits["category"] === undefined
+            ? undefined
+            : (edits["category"]?.id ?? null),
       });
+      clearEdits();
     } catch (err) {}
   };
 
@@ -81,8 +87,8 @@ export const TransactionRow = ({
       </TransactionCell>
       <TransactionCell>
         <CategoryDropdown
-          setValue={(cat) => set("category", cat)}
-          value={get("category") ?? null}
+          setValue={(cat) => set("category", cat ?? null)}
+          value={get("category") ?? undefined}
         />
       </TransactionCell>
       <TransactionCell>

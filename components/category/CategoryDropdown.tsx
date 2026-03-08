@@ -3,7 +3,7 @@ import { SelectField } from "../ui-kit/SelectField";
 import { Category } from "@/api/category";
 
 type CategoryDropdownProps = {
-  value: Category | null;
+  value: Category | undefined;
   setValue: (cat: Category | undefined) => void;
 };
 
@@ -16,15 +16,10 @@ export const CategoryDropdown = ({
   return (
     <SelectField
       value={value}
-      labelFn={(c) => {
-        if (c) return c.name;
-        else return "none";
-      }}
-      idFn={(c) => {
-        if (c) return c.id;
-        else return "none";
-      }}
+      labelFn={(c) => c.name}
+      idFn={(c) => c.id ?? "default"}
       onChange={(e) => {
+        if (e.currentTarget.value === "default") return setValue(undefined);
         const val = categories?.find((c) => c.id === e.currentTarget.value);
         setValue(val);
       }}

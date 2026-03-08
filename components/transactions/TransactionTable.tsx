@@ -49,7 +49,7 @@ export const TransactionTable = ({
     useBulkAPIErrorHandler();
 
   const hasAnyEdits = useMemo(() => {
-    return Array.from(edits.values()).some((e) => Object.keys(e).length > 0);
+    return Array.from(edits.values()).some((e) => Object.keys(e).length > 1);
   }, [edits]);
 
   const orderedTransactions = useMemo(() => {
@@ -113,7 +113,8 @@ export const TransactionTable = ({
           const { category, ...rest } = dp;
           data.push({
             ...rest,
-            category_id: category?.id,
+            category_id:
+              category === undefined ? undefined : (category?.id ?? null),
             id,
           });
         }
@@ -161,31 +162,33 @@ export const TransactionTable = ({
                 </TransactionHeader>
               );
           })}
-          <th className="px-2">
-            {selected.size > 0 && (
-              <Button
-                type="button"
-                variant="danger"
-                size="sm"
-                onClick={() => handleDelete()}
-                disabled={deleting}
-                fullWidth
-              >
-                Delete
-              </Button>
-            )}
-            {hasAnyEdits && (
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => handleEdit()}
-                disabled={editing}
-                fullWidth
-              >
-                Save Changes
-              </Button>
-            )}
+          <th className="px-2 w-75">
+            <div className="w-full flex items-center">
+              {hasAnyEdits && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handleEdit()}
+                  disabled={editing}
+                  fullWidth
+                >
+                  Save Changes
+                </Button>
+              )}
+              {selected.size > 0 && (
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete()}
+                  disabled={deleting}
+                  fullWidth
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </th>
         </tr>
       </thead>
@@ -210,6 +213,13 @@ export const TransactionTable = ({
                     next.set(t.id, { ...rest, [k]: v });
                   }
 
+                  return next;
+                })
+              }
+              clearEdits={() =>
+                setEdits((prev) => {
+                  const next = new Map(prev);
+                  next.set(t.id, {});
                   return next;
                 })
               }
