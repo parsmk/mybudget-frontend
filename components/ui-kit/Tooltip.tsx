@@ -26,7 +26,7 @@ export const Tooltip = ({
   return createPortal(
     <div
       style={{ top: pos?.top, left: pos?.left }}
-      className={`fixed p-2 -translate-y-[105%] z-50 rounded-md min-w-50 min-h-20 ${variantClasses[variant]}`}
+      className={`fixed p-2 -translate-y-[105%] z-50 rounded-md ${variantClasses[variant]}`}
     >
       {children}
     </div>,

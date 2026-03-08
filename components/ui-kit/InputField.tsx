@@ -1,6 +1,7 @@
 import { forwardRef, useRef, useState } from "react";
 import { Danger } from "../svgs/Danger";
 import { Tooltip } from "./Tooltip";
+import { ErrorTooltip } from "./ErrorTooltip";
 
 export type InputFieldTypes = "text" | "password" | "date" | "number";
 
@@ -110,15 +111,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           )}
           {
             <div className="ml-1">
-              <Danger
-                ref={errorIcon}
-                className={`text-danger size-5 ${errors && errors.length > 0 ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-                onMouseEnter={() => setErrsOpen(true)}
-                onMouseLeave={() => setErrsOpen(false)}
-              />
-              <Tooltip target={errorIcon} open={errsOpen} variant="danger">
-                {errors}
-              </Tooltip>
+              <ErrorTooltip errors={errors ?? []} />
             </div>
           }
         </div>
