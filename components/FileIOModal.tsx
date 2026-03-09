@@ -83,7 +83,7 @@ export const FileIOModal = ({ open, close, accountID }: FileIOModalProps) => {
             <div className="grow">
               <p>Select the first row of data with the checkbox!</p>
               <div className="overflow-x-auto rounded-md border my-2">
-                <table className="divide-y w-full">
+                <table className="divide-y min-w-max w-full">
                   <tbody className="divide-y divide-foreground">
                     {sheetData.slice(0, 5).map((row, rowNum) => (
                       <tr key={rowNum} className="divide-x">
