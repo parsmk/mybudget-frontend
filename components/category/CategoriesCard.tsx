@@ -33,7 +33,6 @@ export const CategoriesCard = ({
           variant="grid"
           value={newCat}
           onChange={(e) => setNewCat(e.currentTarget.value)}
-          onKeyEnter={() => handleSubmit()}
           onBlur={() => handleSubmit()}
         />
       </div>
